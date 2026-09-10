@@ -12,6 +12,7 @@ Tanggung Jawab:
 3. Menghubungkan komponen global
 4. Menyediakan Navigation, Workspace,
    dan StatusBar
+5. Mengecek dan memasang update aplikasi
 
 Struktur Layout:
 
@@ -28,6 +29,7 @@ import os
 import sys
 import threading
 import subprocess
+
 import customtkinter as ctk
 
 from version import APP_NAME, APP_VERSION
@@ -45,24 +47,6 @@ from core.services.update_downloader import UpdateDownloader
 
 
 class MahdiPDFStudio(ctk.CTk):
-    """
-    Window utama aplikasi.
-
-    Komponen:
-
-        Sidebar
-            │
-            ▼
-        Navigation
-            │
-            ▼
-        Workspace
-            │
-            ▼
-        Pages
-
-    Workspace akan menampilkan halaman aplikasi.
-    """
 
     # ==================================================
     # Application Configuration
@@ -72,10 +56,23 @@ class MahdiPDFStudio(ctk.CTk):
     APP_HEIGHT = 650
 
     # ==================================================
+    # Update Configuration
+    # ==================================================
+
+    UPDATER_DOWNLOAD_URL = (
+        "https://github.com/"
+        "muhammadhadi02/"
+        "MahdiPDFStudio/"
+        "releases/latest/download/"
+        "MahdiPDFStudioUpdater.exe"
+    )
+
+    # ==================================================
     # Constructor
     # ==================================================
 
     def __init__(self):
+
         super().__init__()
 
         from themes.colors import Colors
@@ -118,16 +115,19 @@ class MahdiPDFStudio(ctk.CTk):
         # ==================================================
 
         self.update_dialog = None
+
         self.update_progress_bar = None
+
         self.update_progress_label = None
+
         self.update_status_label = None
 
-        # Menyimpan informasi update aktif.
         self.current_update_info = None
 
-        # Menandakan aplikasi sedang melakukan
-        # proses update.
         self.is_updating = False
+
+        # Menyimpan path updater temporary
+        self.downloaded_updater_path = None
 
         # ==================================================
         # Layout Configuration
@@ -219,7 +219,7 @@ class MahdiPDFStudio(ctk.CTk):
         )
 
         # ==================================================
-        # Hubungkan Navigation ke Workspace
+        # Navigation → Workspace
         # ==================================================
 
         self.navigation.set_workspace(
@@ -227,7 +227,7 @@ class MahdiPDFStudio(ctk.CTk):
         )
 
         # ==================================================
-        # Center Window
+        # Window Position
         # ==================================================
 
         self.after(
@@ -237,9 +237,10 @@ class MahdiPDFStudio(ctk.CTk):
 
         self.after(
             200,
-            lambda: WindowStyle.apply_fluent_style(
-                self
-            )
+            lambda:
+                WindowStyle.apply_fluent_style(
+                    self
+                )
         )
 
         # ==================================================
@@ -256,9 +257,10 @@ class MahdiPDFStudio(ctk.CTk):
     # ======================================================
 
     def check_for_updates(self):
+
         """
-        Mengecek update di background agar UI
-        tidak freeze.
+        Mengecek update di background
+        agar UI tidak freeze.
         """
 
         def worker():
@@ -292,18 +294,17 @@ class MahdiPDFStudio(ctk.CTk):
         self,
         update_info
     ):
+
         """
         Menampilkan dialog ketika versi baru
         tersedia.
         """
 
-        # Jangan membuka dialog update kedua
-        # jika dialog sebelumnya masih ada.
-
         if (
             self.update_dialog is not None
             and self.update_dialog.winfo_exists()
         ):
+
             return
 
         self.current_update_info = (
@@ -547,11 +548,15 @@ class MahdiPDFStudio(ctk.CTk):
             side="right"
         )
 
-        # Simpan reference dialog
+        # ==================================================
+        # Reference
+        # ==================================================
 
         self.update_dialog = dialog
 
-        # Bersihkan reference ketika dialog ditutup
+        # ==================================================
+        # Close Handler
+        # ==================================================
 
         def on_close():
 
@@ -563,7 +568,13 @@ class MahdiPDFStudio(ctk.CTk):
 
                 pass
 
-            dialog.destroy()
+            try:
+
+                dialog.destroy()
+
+            except Exception:
+
+                pass
 
             self.update_dialog = None
 
@@ -573,16 +584,16 @@ class MahdiPDFStudio(ctk.CTk):
         )
 
     # ======================================================
-    # UPDATE DOWNLOAD PROGRESS
+    # DOWNLOAD PROGRESS DIALOG
     # ======================================================
 
     def show_download_progress(
         self,
         update_info
     ):
+
         """
-        Menampilkan dialog progress ketika update
-        sedang diunduh.
+        Menampilkan dialog progress download.
         """
 
         dialog = ctk.CTkToplevel(
@@ -635,7 +646,7 @@ class MahdiPDFStudio(ctk.CTk):
         )
 
         # ==================================================
-        # Main Container
+        # Container
         # ==================================================
 
         container = ctk.CTkFrame(
@@ -651,7 +662,7 @@ class MahdiPDFStudio(ctk.CTk):
         )
 
         # ==================================================
-        # Update Icon
+        # Icon
         # ==================================================
 
         icon = ctk.CTkLabel(
@@ -810,7 +821,7 @@ class MahdiPDFStudio(ctk.CTk):
         )
 
         # ==================================================
-        # Simpan Reference
+        # Reference
         # ==================================================
 
         self.update_dialog = dialog
@@ -825,11 +836,9 @@ class MahdiPDFStudio(ctk.CTk):
         self,
         percent
     ):
-        """
-        Memperbarui progress bar download.
 
-        Method ini dijalankan pada main thread
-        menggunakan self.after().
+        """
+        Memperbarui progress bar.
         """
 
         try:
@@ -838,6 +847,7 @@ class MahdiPDFStudio(ctk.CTk):
                 self.update_progress_bar
                 is None
             ):
+
                 return
 
             percent = max(
@@ -881,7 +891,7 @@ class MahdiPDFStudio(ctk.CTk):
             )
 
     # ======================================================
-    # START UPDATE DOWNLOAD
+    # START UPDATE
     # ======================================================
 
     def start_update(
@@ -889,9 +899,9 @@ class MahdiPDFStudio(ctk.CTk):
         update_info,
         dialog
     ):
+
         """
-        Memulai proses download update
-        di background thread.
+        Memulai proses update.
         """
 
         download_url = (
@@ -909,7 +919,7 @@ class MahdiPDFStudio(ctk.CTk):
             return
 
         # ==================================================
-        # Tutup Dialog Update
+        # Tutup Dialog Informasi
         # ==================================================
 
         try:
@@ -929,13 +939,13 @@ class MahdiPDFStudio(ctk.CTk):
             pass
 
         # ==================================================
-        # Status
+        # Update State
         # ==================================================
 
         self.is_updating = True
 
         # ==================================================
-        # Tampilkan Progress Dialog
+        # Progress Dialog
         # ==================================================
 
         self.show_download_progress(
@@ -947,7 +957,7 @@ class MahdiPDFStudio(ctk.CTk):
         )
 
         print(
-            "Versi terbaru :",
+            "Versi terbaru:",
             update_info[
                 "latest_version"
             ]
@@ -983,6 +993,11 @@ class MahdiPDFStudio(ctk.CTk):
 
             try:
 
+                # --------------------------------------------------
+                # STEP 1
+                # Download EXE aplikasi terbaru
+                # --------------------------------------------------
+
                 update_path = (
                     UpdateDownloader.download_update(
                         download_url,
@@ -990,11 +1005,50 @@ class MahdiPDFStudio(ctk.CTk):
                     )
                 )
 
+                # --------------------------------------------------
+                # STEP 2
+                # Download updater otomatis
+                # --------------------------------------------------
+
                 self.after(
                     0,
-                    lambda path=update_path:
+                    lambda:
+                        self.update_status_label.configure(
+                            text=(
+                                "Download aplikasi selesai. "
+                                "Menyiapkan komponen updater..."
+                            ),
+                            text_color="#2563EB"
+                        )
+                )
+
+                updater_path = (
+                    UpdateDownloader.download_updater(
+                        self.UPDATER_DOWNLOAD_URL
+                    )
+                )
+
+                # --------------------------------------------------
+                # STEP 3
+                # Simpan path updater
+                # --------------------------------------------------
+
+                self.downloaded_updater_path = (
+                    updater_path
+                )
+
+                # --------------------------------------------------
+                # STEP 4
+                # Update selesai
+                # --------------------------------------------------
+
+                self.after(
+                    0,
+                    lambda path=update_path,
+                           updater=updater_path:
                         self.update_download_finished(
-                            path
+                            path,
+                            updater
                         )
                 )
 
@@ -1016,48 +1070,22 @@ class MahdiPDFStudio(ctk.CTk):
         thread.start()
 
     # ======================================================
-    # FIND UPDATER EXE
+    # FIND UPDATER
     # ======================================================
 
     def get_updater_path(self):
+
         """
-        Mencari lokasi MahdiPDFStudioUpdater.exe.
+        Menentukan lokasi updater.
 
-        Ketika aplikasi sudah menjadi EXE:
+        MODE EXE:
+            updater akan didownload otomatis
+            sehingga method ini tidak digunakan
+            untuk mencari updater lokal.
 
-            MahdiPDFStudio.exe
-            MahdiPDFStudioUpdater.exe
-
-        berada dalam folder yang sama.
-
-        Ketika dijalankan dari source code,
-        updater dicari di folder dist.
+        MODE SOURCE:
+            gunakan updater yang ada di dist.
         """
-
-        # ==================================================
-        # Mode EXE
-        # ==================================================
-
-        if getattr(
-            sys,
-            "frozen",
-            False
-        ):
-
-            base_dir = os.path.dirname(
-                sys.executable
-            )
-
-            updater_path = os.path.join(
-                base_dir,
-                "MahdiPDFStudioUpdater.exe"
-            )
-
-            return updater_path
-
-        # ==================================================
-        # Mode Source Code
-        # ==================================================
 
         project_root = os.path.dirname(
             os.path.dirname(
@@ -1076,20 +1104,13 @@ class MahdiPDFStudio(ctk.CTk):
         return updater_path
 
     # ======================================================
-    # GET TARGET EXE
+    # TARGET EXE
     # ======================================================
 
     def get_target_exe_path(self):
+
         """
-        Menentukan executable yang akan diganti.
-
-        Dalam mode EXE:
-
-            target = MahdiPDFStudio.exe
-
-        Dalam mode source:
-
-            tidak boleh menggunakan Python executable.
+        Menentukan EXE utama yang akan diganti.
         """
 
         if getattr(
@@ -1105,35 +1126,59 @@ class MahdiPDFStudio(ctk.CTk):
         return None
 
     # ======================================================
-    # START EXTERNAL UPDATER
+    # GET UPDATER FOR INSTALLATION
+    # ======================================================
+
+    def get_installer_updater_path(
+        self,
+        downloaded_updater_path
+    ):
+
+        """
+        Menentukan updater yang akan digunakan.
+
+        Jika aplikasi dijalankan sebagai EXE:
+            gunakan updater hasil download.
+
+        Jika aplikasi dijalankan dari source:
+            gunakan updater dari dist.
+        """
+
+        if getattr(
+            sys,
+            "frozen",
+            False
+        ):
+
+            return downloaded_updater_path
+
+        return self.get_updater_path()
+
+    # ======================================================
+    # LAUNCH UPDATER
     # ======================================================
 
     def launch_updater(
         self,
-        update_path
+        update_path,
+        downloaded_updater_path=None
     ):
+
         """
-        Menjalankan MahdiPDFStudioUpdater.exe.
+        Menjalankan updater.
 
-        Updater menerima dua argument:
+        Argument updater:
 
-            1. File update
-            2. Target EXE
-
-        Setelah updater berjalan,
-        aplikasi utama akan ditutup.
+            1. update file
+            2. target EXE
         """
-
-        updater_path = (
-            self.get_updater_path()
-        )
 
         target_exe = (
             self.get_target_exe_path()
         )
 
         # ==================================================
-        # Validasi Mode
+        # Source Code Protection
         # ==================================================
 
         if target_exe is None:
@@ -1150,8 +1195,26 @@ class MahdiPDFStudio(ctk.CTk):
             return False
 
         # ==================================================
+        # Tentukan Updater
+        # ==================================================
+
+        updater_path = (
+            self.get_installer_updater_path(
+                downloaded_updater_path
+            )
+        )
+
+        # ==================================================
         # Validasi Updater
         # ==================================================
+
+        if not updater_path:
+
+            self.show_update_error(
+                "File updater tidak tersedia."
+            )
+
+            return False
 
         if not os.path.exists(
             updater_path
@@ -1160,7 +1223,7 @@ class MahdiPDFStudio(ctk.CTk):
             self.show_update_error(
                 "MahdiPDFStudioUpdater.exe "
                 "tidak ditemukan.\n\n"
-                f"Lokasi yang dicari:\n"
+                f"Lokasi:\n"
                 f"{updater_path}"
             )
 
@@ -1240,11 +1303,14 @@ class MahdiPDFStudio(ctk.CTk):
 
     def update_download_finished(
         self,
-        update_path
+        update_path,
+        updater_path=None
     ):
+
         """
-        Dipanggil ketika file update selesai
-        diunduh.
+        Dipanggil setelah:
+        1. EXE baru selesai didownload
+        2. Updater selesai didownload
         """
 
         print(
@@ -1254,6 +1320,11 @@ class MahdiPDFStudio(ctk.CTk):
         print(
             "File update:",
             update_path
+        )
+
+        print(
+            "File updater:",
+            updater_path
         )
 
         try:
@@ -1283,21 +1354,22 @@ class MahdiPDFStudio(ctk.CTk):
 
                 self.update_status_label.configure(
                     text=(
-                        "Download selesai. "
-                        "Menyiapkan pemasangan..."
+                        "Update siap dipasang."
                     ),
                     text_color="#16A34A"
                 )
 
             # ==================================================
-            # Tunggu sebentar agar user melihat 100%
+            # Tunggu sebentar
             # ==================================================
 
             self.after(
                 700,
-                lambda path=update_path:
+                lambda path=update_path,
+                       updater=updater_path:
                     self.install_downloaded_update(
-                        path
+                        path,
+                        updater
                     )
             )
 
@@ -1314,17 +1386,20 @@ class MahdiPDFStudio(ctk.CTk):
 
     def install_downloaded_update(
         self,
-        update_path
+        update_path,
+        updater_path=None
     ):
+
         """
-        Menjalankan updater setelah download selesai.
+        Menjalankan updater.
         """
 
         try:
 
             success = (
                 self.launch_updater(
-                    update_path
+                    update_path,
+                    updater_path
                 )
             )
 
@@ -1357,7 +1432,7 @@ class MahdiPDFStudio(ctk.CTk):
             self.update_dialog = None
 
             # ==================================================
-            # Tutup Aplikasi Utama
+            # Jalankan Updater
             # ==================================================
 
             print(
@@ -1383,13 +1458,14 @@ class MahdiPDFStudio(ctk.CTk):
             )
 
     # ======================================================
-    # UPDATE DOWNLOAD FAILED
+    # UPDATE FAILED
     # ======================================================
 
     def update_download_failed(
         self,
         error
     ):
+
         """
         Dipanggil ketika download update gagal.
         """
@@ -1429,9 +1505,6 @@ class MahdiPDFStudio(ctk.CTk):
                     text_color="#DC2626"
                 )
 
-            # Jangan langsung menutup dialog.
-            # User dapat melihat error status.
-
         except Exception as ui_error:
 
             print(
@@ -1440,13 +1513,14 @@ class MahdiPDFStudio(ctk.CTk):
             )
 
     # ======================================================
-    # UPDATE ERROR DIALOG
+    # UPDATE ERROR
     # ======================================================
 
     def show_update_error(
         self,
         message
     ):
+
         """
         Menampilkan dialog error update.
         """
@@ -1600,6 +1674,7 @@ class MahdiPDFStudio(ctk.CTk):
     # ======================================================
 
     def center_window(self):
+
         """
         Menempatkan window di tengah layar.
         """
