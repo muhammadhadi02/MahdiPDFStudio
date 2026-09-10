@@ -1,0 +1,23 @@
+class Spacing:
+
+    PAGE_PADDING = 30
+
+    CARD_GAP = 20
+
+    SECTION_GAP = 30
+
+    CARD_RADIUS = 24
+
+    BUTTON_RADIUS = 16
+
+    HERO_HEIGHT = 220
+
+    CARD_HEIGHT = 180
+
+    CARD_PADDING = 20
+
+    ICON_RADIUS = 16
+
+    SECTION_TITLE_GAP = 20
+
+    FEATURE_CARD_HEIGHT = 120

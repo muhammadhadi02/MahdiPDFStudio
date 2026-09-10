@@ -1,0 +1,60 @@
+MahdiPDFStudio/
+│
+├── app/
+│   ├── app.py                 # Entry point
+│   └── controller.py          # Main controller
+│
+├── core/
+│   ├── navigation.py          # Navigation manager (otaknya)
+│   ├── event_bus.py           # Event system
+│   ├── settings.py            # Config
+│   └── plugin_manager.py      # Plugin loader
+│
+├── ui/
+│   ├── sidebar.py
+│   ├── workspace.py (layarnya)
+│   ├── info_panel.py
+│   ├── statusbar.py
+│   │
+│   ├── pages/
+│   │      dashboard_page.py
+│   │      merge_page.py
+│   │      split_page.py
+│   │      rotate_page.py
+│   │      compress_page.py
+│   │      watermark_page.py
+│   │
+│   └── sections/
+│          hero_section.py
+│          quick_tools.py
+│          recent_files.py
+│          drop_zone.py
+│
+├── widgets/
+│   ├── primary_button.py
+│   ├── sidebar_button.py
+│   ├── feature_card.py
+│   ├── stat_card.py
+│   ├── drop_zone_widget.py
+│   ├── toolbar.py
+│   └── modal.py
+│
+├── plugins/
+│   ├── merge/
+│   ├── split/
+│   ├── rotate/
+│   ├── compress/
+│   └── watermark/
+│
+├── themes/
+│   ├── colors.py
+│   ├── fonts.py
+│   ├── style.py
+│   └── icons.py
+│
+├── assets/
+│   ├── icons/
+│   ├── images/
+│   └── logo/
+│
+└── requirements.txt
