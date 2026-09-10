@@ -2853,7 +2853,8 @@ class BanpangBrowserService:
         cls,
         driver,
         preferred_nik=None,
-        excluded_srcs=None
+        excluded_srcs=None,
+        photo_type=None
     ):
         """
         Mengambil URL foto asli dari viewer Banpang.
@@ -2929,6 +2930,26 @@ class BanpangBrowserService:
             text = decoded_url(src)
             return preferred_nik in text
 
+        def url_matches_photo_type(src):
+            """
+            Memastikan URL sesuai jenis foto yang sedang diminta.
+
+            ktp = harus /ktp/
+            pbp = harus /fotos/
+            """
+            if photo_type not in ("ktp", "pbp"):
+                return True
+
+            text = decoded_url(src).lower()
+
+            if photo_type == "ktp":
+                return "/ktp/" in text
+
+            if photo_type == "pbp":
+                return "/fotos/" in text
+
+            return False
+
         # ==========================================================
         # 1. KUMPULKAN SEMUA URL YANG TERLIHAT DI DOM
         # ==========================================================
@@ -2967,6 +2988,9 @@ class BanpangBrowserService:
                             continue
 
                         if not is_banpang_photo_url(value):
+                            continue
+
+                        if not url_matches_photo_type(value):
                             continue
 
                         candidates.append({
@@ -3029,6 +3053,9 @@ class BanpangBrowserService:
                 for value in matches:
                     value = normalize_url(value)
                     if not is_banpang_photo_url(value):
+                        continue
+
+                    if not url_matches_photo_type(value):
                         continue
                     candidates.append({
                         "url": value,
@@ -3351,15 +3378,48 @@ class BanpangBrowserService:
 
         deadline = time.time() + 10.0
 
+        # ============================================================
+        # TENTUKAN JENIS FOTO
+        # ============================================================
+
+        photo_type = (
+            "ktp"
+            if photo_index == 0
+            else "pbp"
+        )
+
+        required_folder = (
+            "/ktp/"
+            if photo_type == "ktp"
+            else "/fotos/"
+        )
+
+        print(
+            f"Target jenis foto: "
+            f"{'KTP' if photo_type == 'ktp' else 'PBP'}"
+        )
+
+        print(
+            f"Target folder URL: {required_folder}"
+        )
+
         while time.time() < deadline:
 
             try:
+
                 candidate = cls._extract_image_bytes_from_visible_page(
                     driver,
                     preferred_nik=expected_nik,
                     excluded_srcs=previous_srcs,
+                    photo_type=photo_type,
                 )
-            except Exception:
+
+            except Exception as error:
+
+                print(
+                    f"{label}: extractor error: {error}"
+                )
+
                 candidate = None
 
             if candidate:
@@ -3377,16 +3437,24 @@ class BanpangBrowserService:
                 if expected_nik:
 
                     # ------------------------------------------------
-                    # Foto harus berasal dari URL yang dapat diverifikasi
+                    # URL wajib tersedia
                     # ------------------------------------------------
 
                     if not image_url_text:
+
+                        print(
+                            f"{label}: URL foto kosong. "
+                            "Menunggu..."
+                        )
+
                         result = None
+
                         time.sleep(0.4)
+
                         continue
 
                     # ------------------------------------------------
-                    # Jangan pernah menerima logo / asset UI
+                    # Jangan pernah menerima asset UI
                     # ------------------------------------------------
 
                     lower_url = image_url_text.lower()
@@ -3404,14 +3472,73 @@ class BanpangBrowserService:
                         item in lower_url
                         for item in forbidden
                     ):
+
                         print(
-                            f"{label}: kandidat merupakan asset UI, "
-                            "bukan foto PBP. Menunggu..."
+                            f"{label}: kandidat merupakan "
+                            "asset UI, bukan foto. "
+                            "Menunggu..."
                         )
 
                         result = None
+
                         time.sleep(0.4)
+
                         continue
+
+                    # ------------------------------------------------
+                    # VALIDASI JENIS FOTO
+                    # ------------------------------------------------
+
+                    import urllib.parse
+
+                    decoded_url = image_url_text
+
+                    for _ in range(3):
+
+                        new_url = urllib.parse.unquote(
+                            decoded_url
+                        )
+
+                        if new_url == decoded_url:
+                            break
+
+                        decoded_url = new_url
+
+                    lower_decoded_url = (
+                        decoded_url.lower()
+                    )
+
+                    # ------------------------------------------------
+                    # Foto KTP harus /ktp/
+                    # Foto PBP harus /fotos/
+                    # ------------------------------------------------
+
+                    if required_folder not in lower_decoded_url:
+
+                        print(
+                            f"{label}: jenis foto tidak cocok."
+                        )
+
+                        print(
+                            f"  Dibutuhkan : "
+                            f"{required_folder}"
+                        )
+
+                        print(
+                            f"  URL        : "
+                            f"{image_url_text}"
+                        )
+
+                        result = None
+
+                        time.sleep(0.4)
+
+                        continue
+
+                    print(
+                        f"✓ Jenis foto cocok: "
+                        f"{'KTP' if photo_type == 'ktp' else 'PBP'}"
+                    )
 
                     # ------------------------------------------------
                     # Cari NIK pada URL
@@ -3421,7 +3548,7 @@ class BanpangBrowserService:
 
                     url_niks = re.findall(
                         r"\d{16}",
-                        image_url_text
+                        decoded_url
                     )
 
                     # ------------------------------------------------
@@ -3431,12 +3558,15 @@ class BanpangBrowserService:
                     if expected_nik not in url_niks:
 
                         if url_niks:
+
                             print(
                                 f"{label}: NIK URL "
                                 f"{url_niks[0]} berbeda dari target "
                                 f"{expected_nik}. Menunggu..."
                             )
+
                         else:
+
                             print(
                                 f"{label}: URL belum memuat "
                                 f"NIK target {expected_nik}. "
@@ -3444,7 +3574,9 @@ class BanpangBrowserService:
                             )
 
                         result = None
+
                         time.sleep(0.4)
+
                         continue
 
                     # ------------------------------------------------
@@ -3455,6 +3587,10 @@ class BanpangBrowserService:
                         f"✓ NIK foto cocok: {expected_nik}"
                     )
 
+                    # ------------------------------------------------
+                    # SEMUA VALIDASI LULUS
+                    # ------------------------------------------------
+
                     result = (
                         image_bytes,
                         image_url
@@ -3463,8 +3599,40 @@ class BanpangBrowserService:
                     break
 
                 else:
-                    # Jika expected_nik tidak diberikan,
-                    # kandidat boleh diterima.
+
+                    # =================================================
+                    # TANPA NIK
+                    # Tetap validasi jenis foto
+                    # =================================================
+
+                    import urllib.parse
+
+                    decoded_url = image_url_text
+
+                    for _ in range(3):
+
+                        new_url = urllib.parse.unquote(
+                            decoded_url
+                        )
+
+                        if new_url == decoded_url:
+                            break
+
+                        decoded_url = new_url
+
+                    if required_folder not in decoded_url.lower():
+
+                        print(
+                            f"{label}: jenis foto tidak cocok. "
+                            f"Dibutuhkan {required_folder}"
+                        )
+
+                        result = None
+
+                        time.sleep(0.4)
+
+                        continue
+
                     result = (
                         image_bytes,
                         image_url

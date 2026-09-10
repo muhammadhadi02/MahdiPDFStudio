@@ -121,7 +121,12 @@ class QuickToolsSection(ctk.CTkFrame):
             weight=1
         )
 
-        for index, tool in enumerate(TOOLS):
+        dashboard_tools = [
+            tool for tool in TOOLS
+            if tool.page != "verifikasi_banpang"
+        ]
+
+        for index, tool in enumerate(dashboard_tools):
 
             row = index // 2
             col = index % 2

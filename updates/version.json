@@ -1,0 +1,13 @@
+{
+    "version": "1.0.0",
+    "download_url": "https://wqeaftswaiglrtpoxtfq.supabase.co/storage/v1/object/public/updates/MahdiPDFStudio.exe",
+    "release_notes": [
+        "Initial stable release of Mahdi PDF Studio.",
+        "Merge PDF",
+        "Split PDF",
+        "TUL 309",
+        "MONEV Piutang",
+        "Verifikasi Banpang",
+        "Chat Admin"
+    ]
+}

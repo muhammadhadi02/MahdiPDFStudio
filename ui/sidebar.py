@@ -178,8 +178,8 @@ class Sidebar(ctk.CTkFrame):
 
         brand_frame.pack(
             fill="x",
-            padx=12
-    
+            padx=18,
+            pady=(16, 18)
         )
 
         self.logo = ctk.CTkImage(
@@ -194,7 +194,9 @@ class Sidebar(ctk.CTkFrame):
             fg_color="transparent"
         )
 
-        header_frame.pack(fill="x")
+        header_frame.pack(
+            fill="x"
+        )
 
         logo = ctk.CTkLabel(
             header_frame,
@@ -224,7 +226,9 @@ class Sidebar(ctk.CTkFrame):
             anchor="w"
         )
 
-        title.pack(anchor="w")
+        title.pack(
+            anchor="w"
+        )
 
         subtitle = ctk.CTkLabel(
             text_frame,
@@ -234,7 +238,9 @@ class Sidebar(ctk.CTkFrame):
             anchor="w"
         )
 
-        subtitle.pack(anchor="w")
+        subtitle.pack(
+            anchor="w"
+        )
 
     # ==================================================
     # Dashboard Section

@@ -11,7 +11,33 @@ a = Analysis(
     datas=[
         ('assets', 'assets'),
     ],
-    hiddenimports=[],
+    hiddenimports=[
+        # Selenium Core
+        "selenium",
+        "selenium.webdriver",
+        "selenium.webdriver.chrome",
+        "selenium.webdriver.chrome.webdriver",
+        "selenium.webdriver.chrome.options",
+        "selenium.webdriver.chrome.service",
+
+        # Selenium Common
+        "selenium.webdriver.common",
+        "selenium.webdriver.common.by",
+        "selenium.webdriver.common.keys",
+        "selenium.webdriver.common.action_chains",
+
+        # Selenium Support
+        "selenium.webdriver.support",
+        "selenium.webdriver.support.ui",
+        "selenium.webdriver.support.expected_conditions",
+
+        # Selenium Exceptions
+        "selenium.common.exceptions",
+
+        # WebDriver Manager (kalau dipakai)
+        "webdriver_manager",
+        "webdriver_manager.chrome",
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
