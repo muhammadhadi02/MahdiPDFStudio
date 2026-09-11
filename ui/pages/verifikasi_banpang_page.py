@@ -1570,13 +1570,16 @@ class VerifikasiBanpangPage(ctk.CTkFrame):
             print(f"Total PBP website        : {total_number}")
 
             # ==========================================================
-            # 2. PASTIKAN SEMUA PBP SUDAH TAMPIL
+            # 2. GUNAKAN HANYA DATA PBP YANG SEDANG TAMPIL
             # ==========================================================
-            if total_number > len(rows):
+            print(
+                f"Mode pengambilan: hanya memproses {len(rows)} "
+                f"PBP yang sedang tampil pada halaman website."
+            )
+
+            if not rows:
                 raise Exception(
-                    f"Data yang tampil baru {len(rows)} PBP dari total "
-                    f"{total_number}. Pastikan Baris per halaman "
-                    f"pada website dipilih 500."
+                    "Tidak ada data PBP yang sedang tampil pada tabel website."
                 )
 
             self._ui_call(
