@@ -37,49 +37,16 @@ from core.services.banpang_pdf_service import BanpangPDFService
 
 PROMPT_VERIFIKASI = {
 
-    # ======================================================
+    # ==========================================================
     # NORMAL
-    # ======================================================
-    "Normal": """ANDA BERTUGAS SEBAGAI VERIFIKATOR DATA BANTUAN PANGAN (BANPANG).
+    # ==========================================================
+    "Normal": """
+ANDA BERTUGAS SEBAGAI VERIFIKATOR DATA BANTUAN PANGAN (BANPANG).
 
-Lakukan verifikasi secara OBJEKTIF, DETAIL, INDIVIDUAL, DAN BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF YANG SAYA UPLOAD.
+Lakukan verifikasi secara OBJEKTIF, DETAIL, INDIVIDUAL, DAN BERDASARKAN BUKTI yang terdapat pada PDF yang saya upload.
 
 KHUSUS UNTUK:
-
 STATUS PBP = "NORMAL"
-
-============================================================
-SUMBER BUKTI
-============================================================
-
-Untuk verifikasi kategori NORMAL, gunakan:
-
-1. Data PBP yang tercantum pada PDF.
-2. Foto KTP PBP yang tercantum pada PDF.
-
-PENTING:
-
-PDF merupakan sumber utama verifikasi.
-
-Foto PBP / foto dokumentasi penyerahan TIDAK menjadi bagian dari pemeriksaan ini.
-
-JANGAN mencari Foto PBP di dalam PDF.
-
-JANGAN meminta atau mengasumsikan adanya Foto PBP.
-
-JANGAN menilai:
-
-- keberadaan PBP pada foto penyerahan;
-- KTP pada foto penyerahan;
-- jumlah karung/beras;
-- dokumentasi penyerahan;
-- originalitas Foto PBP.
-
-Fokus verifikasi adalah:
-
-DATA PBP
-↔
-KTP PBP.
 
 ============================================================
 TUJUAN VERIFIKASI
@@ -87,518 +54,217 @@ TUJUAN VERIFIKASI
 
 Memastikan:
 
-1. Nama PBP pada data sesuai dengan nama pada KTP PBP.
-2. NIK PBP pada data sesuai dengan NIK pada KTP PBP.
-3. NIK cocok 16/16 digit.
-4. KTP PBP tersedia.
-5. KTP PBP dapat dinilai sebagai ASLI.
-6. Tidak terdapat perbedaan identitas yang material.
+1. Identitas PBP pada data sesuai dengan KTP PBP.
+2. Nama PBP sesuai dengan nama pada KTP.
+3. NIK PBP sesuai dengan NIK pada KTP.
+4. KTP PBP tersedia dan dapat diidentifikasi sebagai KTP FISIK ASLI secara visual.
 
 ============================================================
-SYARAT WAJIB LOLOS
+ATURAN SUMBER DATA
 ============================================================
 
-PBP hanya dapat dinyatakan LOLOS apabila seluruh syarat berikut terbukti:
-
-1. Nama PBP sesuai dengan nama pada KTP PBP.
-2. NIK PBP sesuai dengan NIK pada KTP PBP.
-3. NIK cocok 16/16 digit.
-4. KTP PBP tersedia.
-5. KTP PBP teridentifikasi sebagai ASLI.
-6. Tidak terdapat perbedaan identitas material lainnya.
-
-Jika salah satu syarat wajib terbukti tidak terpenuhi:
-
-→ TIDAK LOLOS.
-
-Jika bukti tersedia tetapi tidak cukup jelas untuk menentukan:
-
-→ PERLU VERIFIKASI.
+1. PDF adalah SATU-SATUNYA sumber bukti.
+2. Jangan menggunakan asumsi atau pengetahuan dari luar PDF.
+3. Jangan mencari informasi tambahan di internet.
+4. Jangan mengarang data yang tidak terlihat.
+5. Jangan memperbaiki atau menormalisasi nama, NIK, alamat, Kecamatan, atau data lainnya.
+6. Jika tulisan kurang jelas, jangan menebak.
+7. Jika bukti tidak cukup untuk menentukan hasil → PERLU VERIFIKASI.
 
 ============================================================
 PEMERIKSAAN NAMA
 ============================================================
 
-Bandingkan secara langsung:
+Bandingkan:
 
-NAMA PBP PADA DATA
-↔
-NAMA PADA KTP PBP.
+Nama PBP pada Data
+VS
+Nama pada KTP PBP.
 
-Tampilkan kedua nama secara lengkap.
+Kategori:
 
-Contoh:
+- SESUAI
+- BERBEDA
+- TIDAK DAPAT DIVERIFIKASI
 
-Nama PBP : MUHAMMAD HADI PUTRA
-Nama KTP : MUHAMMAD HADI PUTRA
-Detail   : SAMA
+Jika terdapat perbedaan nama yang jelas → TIDAK LOLOS.
 
-→ SESUAI.
-
-Jika berbeda:
-
-Nama PBP : MUHAMMAD HADI
-Nama KTP : MUHAMMAD HADI PUTRA
-Detail   : BERBEDA — terdapat tambahan nama "PUTRA" pada KTP.
-
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
-
-Jika perbedaan hanya berupa format penulisan yang tidak material, jelaskan secara spesifik.
-
-JANGAN otomatis menganggap dua nama berbeda sebagai sama.
-
-Jika nama tidak terbaca:
-
-→ PERLU VERIFIKASI.
-
-JANGAN menebak nama.
+Jangan menganggap nama sama hanya karena terlihat mirip.
 
 ============================================================
 PEMERIKSAAN NIK
 ============================================================
 
-NIK adalah identitas utama.
-
 Bandingkan:
 
-NIK PBP PADA DATA
-↔
-NIK YANG TERLIHAT PADA KTP PBP.
+NIK PBP pada Data
+VS
+NIK pada KTP PBP.
 
-WAJIB membandingkan 16 DIGIT satu per satu dari kiri ke kanan.
+Ketentuan:
 
-Tampilkan kedua NIK secara lengkap apabila terbaca.
-
-Jika 16/16 digit sama:
-
-NIK PBP : 1301055508540001
-NIK KTP : 1301055508540001
-Detail  : 16/16 DIGIT SAMA.
-
-→ SESUAI.
-
-Jika terdapat perbedaan:
-
-NIK PBP : 1301055508540001
-NIK KTP : 1301055508540002
-Detail  : Digit ke-16 berbeda (1 ≠ 2).
-
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
-
-Jika lebih dari satu digit berbeda, sebutkan SEMUA posisi digit yang berbeda.
-
-Contoh:
-
-Detail:
-- Digit ke-8 berbeda (5 ≠ 4).
-- Digit ke-15 berbeda (0 ≠ 2).
-
-→ TIDAK LOLOS.
-
-JANGAN:
-
-- menebak angka;
-- memperbaiki angka;
-- menganggap typo;
-- menganggap angka mirip sebagai sama;
-- menggunakan NIK header/caption sebagai pengganti NIK KTP.
-
-Jika satu atau beberapa digit tidak terbaca:
-
-→ PERLU VERIFIKASI.
+1. NIK harus terdiri dari 16 digit.
+2. Semua digit harus sama.
+3. Jika terdapat 1 digit saja yang berbeda → TIDAK LOLOS.
+4. Jika beberapa digit berbeda → TIDAK LOLOS.
+5. Tampilkan posisi digit yang berbeda jika dapat dibaca dengan jelas.
+6. Jika NIK tidak terbaca → PERLU VERIFIKASI.
+7. Jangan menebak digit yang tidak terlihat.
 
 ============================================================
-KETENTUAN NIK
-============================================================
-
-NIK WAJIB:
-
-- berjumlah 16 digit;
-- dapat dibaca;
-- dan cocok 16/16 digit dengan KTP.
-
-Kurang dari 16 digit:
-
-→ TIDAK SESUAI.
-
-Lebih dari 16 digit:
-
-→ TIDAK SESUAI.
-
-16 digit tetapi terdapat perbedaan:
-
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
-
-Jika digit tidak dapat dibaca:
-
-→ PERLU VERIFIKASI.
-
-============================================================
-KTP PBP
+PEMERIKSAAN KTP PBP
 ============================================================
 
 KTP PBP WAJIB tersedia.
 
-Gunakan status:
+Periksa secara VISUAL apakah dokumen merupakan KTP FISIK ASLI.
+
+Kategori:
 
 - ASLI
 - FOTOKOPI
 - TIDAK ADA
 - TIDAK TERBACA
 
-ASLI:
+Jika KTP berupa fotokopi → TIDAK LOLOS.
 
-→ SESUAI.
+Jika KTP tidak tersedia → TIDAK LOLOS.
 
-FOTOKOPI:
+Jika KTP tersedia tetapi tidak dapat ditentukan secara visual → PERLU VERIFIKASI.
 
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
-
-TIDAK ADA:
-
-→ TIDAK LOLOS.
-
-TIDAK TERBACA:
-
-→ PERLU VERIFIKASI.
-
-JANGAN menebak keaslian KTP.
-
-Penilaian ASLI/FOTOKOPI hanya dilakukan berdasarkan karakteristik visual dokumen yang terlihat.
-
-Jangan menyatakan KTP ASLI apabila bukti visual tidak cukup untuk mendukung kesimpulan tersebut.
+Jangan menyatakan "ASLI" hanya karena terdapat gambar KTP.
+Penilaian harus berdasarkan tampilan visual dokumen KTP pada PDF.
 
 ============================================================
-PEMERIKSAAN SILANG IDENTITAS
+PENTING: PEMERIKSAAN VISUAL PDF
 ============================================================
 
-Lakukan pemeriksaan silang:
+WAJIB memeriksa gambar/dokumen yang tertanam di dalam PDF secara visual.
 
-DATA PBP
-↕
-KTP PBP
+Jangan hanya mengandalkan text layer PDF.
 
-Periksa sekurang-kurangnya:
-
-1. Nama.
-2. NIK.
-3. Kesesuaian identitas secara keseluruhan.
-
-JANGAN memberikan LOLOS hanya karena nama sama.
-
-NIK tetap WAJIB diperiksa 16/16 digit.
+Khusus KTP:
+- baca nama secara visual;
+- baca NIK secara visual;
+- periksa bentuk/tampilan KTP;
+- tentukan apakah terlihat sebagai KTP fisik asli, fotokopi, tidak ada, atau tidak terbaca.
 
 ============================================================
-HASIL
+HASIL AKHIR
 ============================================================
 
-Gunakan hanya:
+Gunakan HANYA tiga hasil:
 
-- LOLOS
-- TIDAK LOLOS
-- PERLU VERIFIKASI
+1. LOLOS
+2. TIDAK LOLOS
+3. PERLU VERIFIKASI
 
-LOLOS:
+LOLOS jika seluruh persyaratan wajib terpenuhi.
 
-Hanya jika SEMUA syarat wajib terbukti terpenuhi.
+TIDAK LOLOS jika terdapat pelanggaran persyaratan yang dapat dibuktikan dengan jelas.
 
-TIDAK LOLOS:
-
-Jika terdapat syarat wajib yang TERBUKTI tidak terpenuhi.
-
-PERLU VERIFIKASI:
-
-Jika bukti tersedia tetapi tidak cukup jelas untuk menentukan terpenuhi atau tidak terpenuhi.
+PERLU VERIFIKASI jika bukti tidak cukup atau tidak dapat dibaca dengan jelas.
 
 ============================================================
-OUTPUT WAJIB
+FORMAT OUTPUT
 ============================================================
 
-WAJIB membuat tabel DETAIL satu baris untuk setiap PBP.
+Buat tabel:
 
-JANGAN hanya menulis "SESUAI" atau "TIDAK SESUAI".
+No | No PBP | Nama PBP | Nama KTP | Detail Nama | NIK PBP | NIK KTP | Detail NIK | KTP PBP | HASIL | ALASAN
 
-Tampilkan NILAI YANG DIBANDINGKAN dan DETAIL PERBEDAANNYA.
+Setiap PBP harus diverifikasi INDIVIDUAL.
 
-Format tabel:
+Jangan menggabungkan beberapa PBP menjadi satu pemeriksaan.
 
-| No | No PBP | Nama PBP | Nama KTP | Detail Nama | NIK PBP | NIK KTP | Detail NIK | KTP PBP | HASIL | ALASAN |
-|----|---------|----------|----------|-------------|---------|---------|------------|---------|-------|--------|
-
-Kolom:
-
-Nama PBP:
-→ tuliskan nama yang terdapat pada data PBP.
-
-Nama KTP:
-→ tuliskan nama yang benar-benar terlihat pada KTP.
-
-Detail Nama:
-- SAMA
-- BERBEDA — jelaskan perbedaannya
-- TIDAK DAPAT DIVERIFIKASI
-
-NIK PBP:
-→ tuliskan NIK pada data PBP.
-
-NIK KTP:
-→ tuliskan NIK yang terlihat pada KTP.
-
-Detail NIK:
-- 16/16 DIGIT SAMA
-- BERBEDA — sebutkan posisi digit yang berbeda
-- TIDAK DAPAT DIVERIFIKASI
-
-KTP PBP:
-- ASLI
-- FOTOKOPI
-- TIDAK ADA
-- TIDAK TERBACA
-
-HASIL:
-- LOLOS
-- TIDAK LOLOS
-- PERLU VERIFIKASI
+Pada ALASAN, jelaskan bukti yang menyebabkan hasil tersebut.
 
 ============================================================
-CONTOH OUTPUT
+RECHECK
 ============================================================
 
-Contoh 1:
+Sebelum memberikan hasil akhir, lakukan pemeriksaan ulang untuk memastikan:
 
-| 1 | 001 | MUHAMMAD HADI | MUHAMMAD HADI | SAMA | 1301055508540001 | 1301055508540001 | 16/16 DIGIT SAMA | ASLI | LOLOS | Nama dan NIK sesuai, KTP teridentifikasi ASLI. |
+- Nama sudah dibandingkan dengan benar.
+- NIK sudah dibandingkan digit per digit.
+- Jumlah digit NIK sudah diperiksa.
+- Status KTP sudah diperiksa secara visual.
+- Tidak ada data yang ditebak.
+- Tidak ada PBP yang terlewat.
+- Tidak ada hasil LOLOS ketika bukti sebenarnya tidak cukup.
+""",
 
-Contoh 2:
-
-| 2 | 002 | MUHAMMAD HADI | MUHAMMAD HADI | SAMA | 1301055508540001 | 1301055508540002 | Digit ke-16 berbeda (1 ≠ 2) | ASLI | TIDAK LOLOS | NIK PBP dan NIK KTP berbeda pada digit ke-16. |
-
-Contoh 3:
-
-| 3 | 003 | MUHAMMAD HADI | MUHAMMAD HADI PUTRA | BERBEDA — terdapat tambahan "PUTRA" | 1301055508540001 | 1301055508540001 | 16/16 DIGIT SAMA | ASLI | TIDAK LOLOS | Nama PBP berbeda secara material dengan nama pada KTP. |
-
-Contoh 4:
-
-| 4 | 004 | MUHAMMAD HADI | MUHAMMAD HADI | SAMA | 1301055508540001 | 13010555?8540001 | Digit ke-9 tidak terbaca | ASLI | PERLU VERIFIKASI | Satu digit NIK pada KTP tidak dapat dipastikan. |
-
-============================================================
-REKAPITULASI
-============================================================
-
-| HASIL | JUMLAH | PERSENTASE |
-|-------|-------:|------------:|
-| LOLOS | ... | ...% |
-| TIDAK LOLOS | ... | ...% |
-| PERLU VERIFIKASI | ... | ...% |
-| TOTAL | ... | 100% |
-
-Pastikan:
-
-LOLOS + TIDAK LOLOS + PERLU VERIFIKASI = TOTAL PBP.
-
-PERSENTASE dihitung berdasarkan TOTAL PBP.
-
-============================================================
-KESIMPULAN
-============================================================
-
-Tuliskan:
-
-"Jumlah PBP yang memenuhi seluruh persyaratan kategori NORMAL adalah ... PBP."
-
-Tambahkan ringkasan penyebab TIDAK LOLOS dan PERLU VERIFIKASI apabila ada.
-
-============================================================
-PEMERIKSAAN ULANG
-============================================================
-
-Setelah seluruh PBP diperiksa, lakukan CHECK ULANG khusus terhadap:
-
-1. Nama berbeda.
-2. NIK kurang dari 16 digit.
-3. NIK lebih dari 16 digit.
-4. NIK berbeda satu digit.
-5. NIK berbeda lebih dari satu digit.
-6. Digit NIK tidak terbaca.
-7. KTP fotokopi.
-8. KTP tidak ada.
-9. KTP tidak terbaca.
-10. Identitas tidak dapat dipastikan.
-
-JANGAN memberikan LOLOS sebelum seluruh pemeriksaan ulang selesai.
-
-============================================================
-ATURAN MUTLAK
-============================================================
-
-JANGAN MENGADA-ADA DATA.
-
-JANGAN MENEBak NAMA.
-
-JANGAN MENEBak NIK.
-
-JANGAN MENEBak keaslian KTP.
-
-JANGAN memperbaiki data yang terlihat salah.
-
-NIK WAJIB 16/16 DIGIT SAMA.
-
-SATU DIGIT BERBEDA = TIDAK LOLOS.
-
-KTP PBP WAJIB ASLI.
-
-JANGAN menggunakan Foto PBP sebagai dasar verifikasi kategori NORMAL.
-
-JANGAN mencari Foto PBP di dalam PDF.
-
-FOKUS UTAMA:
-
-DATA PBP
-↔
-KTP PBP.
-
-HASIL AKHIR HARUS BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF.""",
-
-
-    # ======================================================
+    # ==========================================================
     # PERWAKILAN 1 KK
-    # ======================================================
-    "Perwakilan 1 KK": """ANDA BERTUGAS SEBAGAI VERIFIKATOR DATA BANTUAN PANGAN (BANPANG).
+    # ==========================================================
+    "Perwakilan 1 KK": """
+ANDA BERTUGAS SEBAGAI VERIFIKATOR DATA BANTUAN PANGAN (BANPANG).
 
-Lakukan verifikasi secara OBJEKTIF, DETAIL, INDIVIDUAL, DAN BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF YANG SAYA UPLOAD.
+Lakukan verifikasi secara OBJEKTIF, DETAIL, INDIVIDUAL, DAN BERDASARKAN BUKTI yang terdapat pada PDF yang saya upload.
 
 KHUSUS UNTUK:
-
 STATUS PBP = "PERWAKILAN 1 KK"
-
-============================================================
-SUMBER BUKTI
-============================================================
-
-Gunakan:
-
-1. Data PBP pada PDF.
-2. Data Perwakilan pada PDF.
-3. KTP Perwakilan pada PDF.
-4. KK/dokumen keluarga yang tersedia pada PDF.
-
-PENTING:
-
-PDF merupakan sumber utama verifikasi.
-
-Foto PBP / foto dokumentasi penyerahan TIDAK menjadi bagian dari pemeriksaan ini.
-
-JANGAN mencari Foto PBP di dalam PDF.
-
-JANGAN menilai:
-
-- PBP pada foto penyerahan;
-- Perwakilan pada foto penyerahan;
-- KTP pada foto penyerahan;
-- jumlah karung/beras;
-- dokumentasi penyerahan;
-- originalitas Foto PBP.
-
-Fokus verifikasi adalah:
-
-DATA PBP
-↔
-DATA PERWAKILAN
-↔
-KTP PERWAKILAN
-↔
-KK.
 
 ============================================================
 TUJUAN VERIFIKASI
 ============================================================
 
-Memastikan:
+Memastikan bahwa:
 
-1. Nama Perwakilan sesuai dengan KTP Perwakilan.
-2. NIK Perwakilan sesuai dengan KTP Perwakilan.
-3. NIK Perwakilan cocok 16/16 digit.
-4. KTP Perwakilan tersedia dan ASLI.
-5. PBP tercantum dalam KK.
-6. Perwakilan tercantum dalam KK.
-7. PBP dan Perwakilan berada dalam KK yang SAMA.
-
-============================================================
-SYARAT WAJIB LOLOS
-============================================================
-
-1. Nama Perwakilan sesuai dengan KTP Perwakilan.
-2. NIK Perwakilan sesuai dengan KTP Perwakilan.
-3. NIK Perwakilan cocok 16/16 digit.
-4. KTP Perwakilan tersedia.
-5. KTP Perwakilan teridentifikasi ASLI.
-6. PBP tercantum sebagai anggota KK.
-7. Perwakilan tercantum sebagai anggota KK.
-8. Nomor KK PBP dan nomor KK Perwakilan sama.
-9. Hubungan data PBP dan Perwakilan dapat dibuktikan melalui KK.
-
-Jika salah satu syarat wajib terbukti tidak terpenuhi:
-
-→ TIDAK LOLOS.
-
-Jika bukti tidak cukup jelas:
-
-→ PERLU VERIFIKASI.
+1. Data PBP dapat diidentifikasi.
+2. Data Perwakilan dapat diidentifikasi.
+3. Nama Perwakilan sesuai dengan KTP Perwakilan.
+4. NIK Perwakilan sesuai dengan KTP Perwakilan.
+5. KTP Perwakilan tersedia dan secara visual merupakan KTP FISIK ASLI.
+6. PBP tercantum sebagai anggota dalam KK.
+7. Perwakilan tercantum sebagai anggota dalam KK.
+8. PBP dan Perwakilan berada dalam KK yang SAMA.
+9. Nomor KK yang menjadi bukti untuk PBP dan Perwakilan adalah sama.
 
 ============================================================
-KTP PBP TIDAK WAJIB ASLI
+ATURAN PENTING TENTANG KK
 ============================================================
 
-KTP PBP TIDAK menjadi syarat utama kategori PERWAKILAN 1 KK.
+Untuk kategori PERWAKILAN 1 KK:
 
-Jika KTP PBP tidak tersedia:
+KK adalah BUKTI UTAMA untuk membuktikan bahwa PBP dan Perwakilan berada dalam satu keluarga/KK.
 
-→ BUKAN alasan TIDAK LOLOS.
+Perhatikan bahwa pada PDF, dokumen KK yang terlihat dapat merupakan:
 
-Jika KTP PBP tersedia:
+"KK PERWAKILAN"
 
-→ dapat digunakan sebagai bukti tambahan.
+Jika hanya satu dokumen KK yang terlihat dan dokumen tersebut adalah KK Perwakilan, maka gunakan dokumen tersebut sebagai bukti.
 
-KTP PBP dapat berstatus:
+Namun, PBP HARUS benar-benar tercantum sebagai anggota dalam KK tersebut agar dapat dinyatakan PERWAKILAN 1 KK.
 
-- ASLI
-- FOTOKOPI
-- TIDAK ADA
-- TIDAK TERBACA
+Jangan menyimpulkan satu KK hanya berdasarkan:
 
-JANGAN menyatakan TIDAK LOLOS hanya karena KTP PBP tidak tersedia atau berupa fotokopi.
+- nama keluarga;
+- hubungan keluarga yang diasumsikan;
+- alamat yang sama;
+- Kecamatan yang sama;
+- Kabupaten yang sama;
+- kemiripan nama.
+
+Nomor KK adalah bukti utama.
 
 ============================================================
-PEMERIKSAAN NAMA PERWAKILAN
+PEMERIKSAAN DATA PERWAKILAN
 ============================================================
 
 Bandingkan:
 
-NAMA PERWAKILAN PADA DATA
-↔
-NAMA PADA KTP PERWAKILAN.
+Nama Perwakilan pada Data
+VS
+Nama Perwakilan pada KTP.
 
-Tampilkan kedua nama secara lengkap.
+Kategori:
 
-Jika sama:
+- SESUAI
+- BERBEDA
+- TIDAK DAPAT DIVERIFIKASI
 
-→ SESUAI.
-
-Jika berbeda secara material:
-
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
-
-Jelaskan secara spesifik perbedaannya.
-
-Jika tidak terbaca:
-
-→ PERLU VERIFIKASI.
-
-JANGAN menebak nama.
+Jika berbeda secara jelas → TIDAK LOLOS.
 
 ============================================================
 PEMERIKSAAN NIK PERWAKILAN
@@ -606,468 +272,301 @@ PEMERIKSAAN NIK PERWAKILAN
 
 Bandingkan:
 
-NIK PERWAKILAN PADA DATA
-↔
-NIK PADA KTP PERWAKILAN.
+NIK Perwakilan pada Data
+VS
+NIK Perwakilan pada KTP.
 
-WAJIB membandingkan 16 DIGIT satu per satu.
+Ketentuan:
 
-Jika 16/16 digit sama:
-
-→ SESUAI.
-
-Jika satu digit saja berbeda:
-
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
-
-Sebutkan posisi semua digit yang berbeda.
-
-Contoh:
-
-NIK Perwakilan : 1301055508540001
-NIK KTP        : 1301055508540002
-Detail         : Digit ke-16 berbeda (1 ≠ 2).
-
-Jika digit tidak terbaca:
-
-→ PERLU VERIFIKASI.
-
-JANGAN:
-
-- menebak angka;
-- memperbaiki angka;
-- menganggap typo;
-- menggunakan NIK header/caption.
+1. NIK harus 16 digit.
+2. Semua digit harus sama.
+3. Perbedaan satu digit saja → TIDAK LOLOS.
+4. Jika beberapa digit berbeda → TIDAK LOLOS.
+5. Jika NIK tidak terbaca → PERLU VERIFIKASI.
+6. Jangan menebak digit.
 
 ============================================================
-KTP PERWAKILAN
+PEMERIKSAAN KTP PERWAKILAN
 ============================================================
 
-KTP Perwakilan WAJIB ASLI.
+KTP Perwakilan WAJIB tersedia.
 
-Gunakan status:
+Periksa secara VISUAL.
+
+Kategori:
 
 - ASLI
 - FOTOKOPI
 - TIDAK ADA
 - TIDAK TERBACA
 
-ASLI:
+Jika KTP berupa fotokopi → TIDAK LOLOS.
 
-→ SESUAI.
+Jika KTP tidak tersedia → TIDAK LOLOS.
 
-FOTOKOPI:
+Jika tersedia tetapi tidak dapat ditentukan secara visual → PERLU VERIFIKASI.
 
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
-
-TIDAK ADA:
-
-→ TIDAK LOLOS.
-
-TIDAK TERBACA:
-
-→ PERLU VERIFIKASI.
-
-JANGAN menebak keaslian KTP.
+Jangan menyatakan KTP "ASLI" hanya karena terdapat gambar KTP.
 
 ============================================================
 PEMERIKSAAN KK
 ============================================================
 
-PBP DAN PERWAKILAN WAJIB tercantum dalam KK YANG SAMA.
+WAJIB memeriksa gambar KK secara VISUAL.
 
-Bandingkan secara langsung:
+Jangan hanya mengandalkan text layer PDF.
+
+Dari KK, periksa:
+
+1. Nomor KK.
+2. Nama-nama anggota keluarga.
+3. NIK anggota jika terlihat.
+4. Nama PBP.
+5. Nama Perwakilan.
+6. Hubungan keluarga jika tercantum.
+7. Alamat jika tercantum.
+8. Kecamatan jika tercantum.
+
+============================================================
+PEMERIKSAAN PBP DALAM KK
+============================================================
+
+Cari nama PBP secara langsung pada daftar anggota KK.
+
+Kategori:
+
+- ADA
+- TIDAK ADA
+- TIDAK DAPAT DIVERIFIKASI
+
+Jika PBP jelas tercantum → ADA.
+
+Jika PBP jelas tidak tercantum setelah seluruh daftar anggota KK terbaca → TIDAK ADA → TIDAK LOLOS.
+
+Jika daftar KK tidak terbaca atau bukti tidak cukup → TIDAK DAPAT DIVERIFIKASI → PERLU VERIFIKASI.
+
+Jika NIK PBP pada KK terlihat, bandingkan dengan NIK PBP pada data.
+
+Kategori:
+
+- SESUAI
+- BERBEDA
+- TIDAK TERSEDIA / TIDAK TERBACA
+
+Perbedaan NIK yang jelas → TIDAK LOLOS.
+
+Jika NIK tidak terlihat pada KK, jangan menganggap berbeda. Kehadiran NIK pada KK bukan syarat terpisah jika nama PBP dan keanggotaan dalam KK dapat dibuktikan dengan jelas.
+
+============================================================
+PEMERIKSAAN PERWAKILAN DALAM KK
+============================================================
+
+Cari nama Perwakilan secara langsung pada daftar anggota KK.
+
+Kategori:
+
+- ADA
+- TIDAK ADA
+- TIDAK DAPAT DIVERIFIKASI
+
+Jika Perwakilan jelas tercantum → ADA.
+
+Jika Perwakilan jelas tidak tercantum → TIDAK ADA → TIDAK LOLOS.
+
+Jika tidak dapat dibaca → PERLU VERIFIKASI.
+
+Jika NIK Perwakilan pada KK terlihat, bandingkan dengan NIK Perwakilan pada data.
+
+Kategori:
+
+- SESUAI
+- BERBEDA
+- TIDAK TERSEDIA / TIDAK TERBACA
+
+Perbedaan NIK yang jelas → TIDAK LOLOS.
+
+============================================================
+PEMERIKSAAN NOMOR KK
+============================================================
+
+Baca nomor KK secara VISUAL.
+
+Catat:
 
 KK PBP
-↔
-KK PERWAKILAN.
+KK Perwakilan
 
-Tampilkan nilai nomor KK apabila terbaca.
+Jika hanya satu KK Perwakilan yang terlihat dan PBP juga tercantum dalam KK tersebut, maka:
 
-Contoh:
+KK PBP = nomor KK yang terlihat
+KK Perwakilan = nomor KK yang terlihat
 
-KK PBP        : 1701010000000001
-KK Perwakilan : 1701010000000001
-Detail        : NOMOR KK SAMA.
+Detail KK:
 
-→ SESUAI.
+- NOMOR KK SAMA
+- NOMOR KK BERBEDA
+- NOMOR KK TIDAK DAPAT DIVERIFIKASI
 
-Jika berbeda:
+Untuk kategori PERWAKILAN 1 KK:
 
-KK PBP        : 1701010000000001
-KK Perwakilan : 1701010000000002
-Detail        : NOMOR KK BERBEDA.
+NOMOR KK BERBEDA → TIDAK LOLOS.
 
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
+NOMOR KK TIDAK DAPAT DIVERIFIKASI → PERLU VERIFIKASI.
 
-JANGAN menyimpulkan satu KK hanya berdasarkan:
-
-- nama keluarga;
-- alamat;
-- kemiripan nama;
-- asumsi hubungan keluarga.
-
-Nomor KK harus menjadi dasar utama.
-
-Jika nomor KK tidak terbaca:
-
-→ PERLU VERIFIKASI.
+Jangan menebak nomor KK yang buram/tidak terbaca.
 
 ============================================================
-PEMERIKSAAN ANGGOTA KK
+KTP PBP
 ============================================================
 
-Verifikasi bahwa:
+KTP PBP TIDAK WAJIB untuk kategori PERWAKILAN 1 KK.
 
-1. Nama PBP tercantum dalam KK.
-2. NIK PBP tercantum apabila tersedia.
-3. Nama Perwakilan tercantum dalam KK.
-4. NIK Perwakilan tercantum apabila tersedia.
-5. Keduanya berada dalam nomor KK yang sama.
+Jadi:
 
-Jika salah satu tidak dapat dibuktikan:
+- KTP PBP tidak ada → bukan otomatis TIDAK LOLOS.
+- KTP PBP fotokopi → bukan otomatis TIDAK LOLOS.
+- KTP PBP ada → dapat digunakan sebagai bukti tambahan.
+- Jangan menjadikan KTP PBP sebagai syarat wajib.
 
-→ PERLU VERIFIKASI.
+Fokus utama adalah:
 
-Jika terbukti salah satu bukan anggota KK tersebut:
-
-→ TIDAK LOLOS.
+PBP + Perwakilan + KTP Perwakilan + KK.
 
 ============================================================
-PEMERIKSAAN SILANG
+HASIL AKHIR
 ============================================================
 
-Lakukan pemeriksaan silang:
-
-DATA PBP
-↕
-KK
-↕
-DATA PERWAKILAN
-↕
-KTP PERWAKILAN.
-
-Jangan hanya memeriksa apakah nama terlihat sama.
-
-Periksa nilai aktual dan detail perbandingannya.
-
-============================================================
-HASIL
-============================================================
-
-Gunakan hanya:
+Gunakan HANYA:
 
 - LOLOS
 - TIDAK LOLOS
 - PERLU VERIFIKASI
 
-LOLOS hanya jika seluruh syarat wajib terbukti.
+LOLOS jika:
 
-TIDAK LOLOS jika terdapat syarat wajib yang terbukti tidak terpenuhi.
+1. Nama Perwakilan = KTP.
+2. NIK Perwakilan = KTP.
+3. NIK 16 digit dan sesuai.
+4. KTP Perwakilan tersedia.
+5. KTP Perwakilan secara visual merupakan KTP fisik asli.
+6. PBP tercantum dalam KK.
+7. Perwakilan tercantum dalam KK.
+8. Nomor KK sama.
+9. Tidak ada bukti yang bertentangan.
 
-PERLU VERIFIKASI jika bukti tersedia tetapi tidak cukup jelas.
+TIDAK LOLOS jika salah satu persyaratan wajib terbukti gagal.
 
-============================================================
-OUTPUT WAJIB
-============================================================
-
-WAJIB membuat tabel DETAIL satu baris untuk setiap PBP.
-
-JANGAN hanya menulis "SESUAI".
-
-Tampilkan nilai sumber dan hasil perbandingannya.
-
-Format:
-
-| No | No PBP | Nama PBP | NIK PBP | Nama Perwakilan | Nama KTP Perwakilan | Detail Nama | NIK Perwakilan | NIK KTP Perwakilan | Detail NIK | KK PBP | KK Perwakilan | Detail KK | PBP dalam KK | Perwakilan dalam KK | KTP Perwakilan | HASIL | ALASAN |
-|----|---------|----------|---------|-----------------|----------------------|-------------|----------------|---------------------|------------|---------|---------------|------------|---------------|----------------------|-----------------|-------|--------|
-
-Detail Nama:
-- SAMA
-- BERBEDA — jelaskan perbedaannya
-- TIDAK DAPAT DIVERIFIKASI
-
-Detail NIK:
-- 16/16 DIGIT SAMA
-- BERBEDA — sebutkan digit yang berbeda
-- TIDAK DAPAT DIVERIFIKASI
-
-Detail KK:
-- NOMOR KK SAMA
-- NOMOR KK BERBEDA
-- NOMOR KK TIDAK DAPAT DIVERIFIKASI
-
-PBP dalam KK:
-- ADA
-- TIDAK ADA
-- TIDAK DAPAT DIVERIFIKASI
-
-Perwakilan dalam KK:
-- ADA
-- TIDAK ADA
-- TIDAK DAPAT DIVERIFIKASI
-
-KTP Perwakilan:
-- ASLI
-- FOTOKOPI
-- TIDAK ADA
-- TIDAK TERBACA
+PERLU VERIFIKASI jika bukti tidak cukup atau tidak terbaca.
 
 ============================================================
-CONTOH OUTPUT
+FORMAT OUTPUT
 ============================================================
 
-Contoh LOLOS:
+Buat tabel:
 
-Nama Perwakilan:
-MUHAMMAD HADI
-
-Nama KTP:
-MUHAMMAD HADI
-
-Detail:
-SAMA
-
-NIK Perwakilan:
-1301055508540001
-
-NIK KTP:
-1301055508540001
-
-Detail NIK:
-16/16 DIGIT SAMA
-
-KK PBP:
-1701010000000001
-
-KK Perwakilan:
-1701010000000001
-
-Detail KK:
-NOMOR KK SAMA
-
-PBP dalam KK:
-ADA
-
-Perwakilan dalam KK:
-ADA
-
-KTP Perwakilan:
-ASLI
-
-HASIL:
-LOLOS.
-
-Contoh TIDAK LOLOS:
-
-KK PBP:
-1701010000000001
-
-KK Perwakilan:
-1701010000000002
-
-Detail:
-NOMOR KK BERBEDA.
-
-Kategori PERWAKILAN 1 KK mensyaratkan PBP dan Perwakilan berada dalam KK yang sama.
-
-HASIL:
-TIDAK LOLOS.
+No | No PBP | Nama PBP | NIK PBP | Nama Perwakilan | Nama KTP Perwakilan | Detail Nama | NIK Perwakilan | NIK KTP Perwakilan | Detail NIK | KK PBP | KK Perwakilan | Detail KK | PBP dalam KK | NIK PBP dalam KK | Perwakilan dalam KK | NIK Perwakilan dalam KK | KTP Perwakilan | HASIL | ALASAN
 
 ============================================================
-REKAPITULASI
-============================================================
-
-| HASIL | JUMLAH | PERSENTASE |
-|-------|-------:|------------:|
-| LOLOS | ... | ...% |
-| TIDAK LOLOS | ... | ...% |
-| PERLU VERIFIKASI | ... | ...% |
-| TOTAL | ... | 100% |
-
-Pastikan:
-
-LOLOS + TIDAK LOLOS + PERLU VERIFIKASI = TOTAL PBP.
-
-============================================================
-KESIMPULAN
-============================================================
-
-"Jumlah PBP yang memenuhi seluruh persyaratan kategori PERWAKILAN 1 KK adalah ... PBP."
-
-Jika terdapat PBP TIDAK LOLOS atau PERLU VERIFIKASI, berikan ringkasan penyebabnya.
-
-============================================================
-PEMERIKSAAN ULANG
-============================================================
-
-Setelah seluruh PBP diperiksa, lakukan CHECK ULANG khusus terhadap:
-
-1. Nama Perwakilan berbeda.
-2. NIK Perwakilan berbeda satu digit.
-3. NIK Perwakilan berbeda lebih dari satu digit.
-4. Digit NIK tidak terbaca.
-5. KTP Perwakilan fotokopi.
-6. KTP Perwakilan tidak ada.
-7. KTP Perwakilan tidak terbaca.
-8. PBP tidak ditemukan dalam KK.
-9. Perwakilan tidak ditemukan dalam KK.
-10. Nomor KK berbeda.
-11. Nomor KK tidak terbaca.
-
-JANGAN memberikan LOLOS sebelum seluruh pemeriksaan ulang selesai.
-
-============================================================
-ATURAN MUTLAK
-============================================================
-
-JANGAN MENGADA-ADA DATA.
-
-JANGAN MENEBak NAMA.
-
-JANGAN MENEBak NIK.
-
-JANGAN MENEBak NOMOR KK.
-
-JANGAN MENEBak keaslian KTP.
-
-NIK WAJIB 16/16 DIGIT SAMA.
-
-SATU DIGIT BERBEDA = TIDAK LOLOS.
-
-KTP PERWAKILAN WAJIB ASLI.
-
-KTP PBP TIDAK WAJIB.
-
-PBP DAN PERWAKILAN WAJIB BERADA DALAM KK YANG SAMA.
-
-JANGAN menggunakan Foto PBP sebagai dasar verifikasi kategori ini.
-
-JANGAN mencari Foto PBP di dalam PDF.
-
-FOKUS UTAMA:
-
-DATA PBP
-↔
-DATA PERWAKILAN
-↔
-KTP PERWAKILAN
-↔
-KK.
-
-HASIL AKHIR HARUS BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF.""",
-
-
-    # ======================================================
-    # PERWAKILAN BEDA KK
-    # ======================================================
-    "Perwakilan Beda KK": """ANDA BERTUGAS SEBAGAI VERIFIKATOR DATA BANTUAN PANGAN (BANPANG).
-
-Lakukan verifikasi secara OBJEKTIF, DETAIL, INDIVIDUAL, DAN BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF YANG SAYA UPLOAD.
-
-KHUSUS UNTUK:
-
-STATUS PBP = "PERWAKILAN BEDA KK"
-
-============================================================
-SUMBER BUKTI
+DETAIL KK
 ============================================================
 
 Gunakan:
 
-1. Data PBP pada PDF.
-2. Data Perwakilan pada PDF.
-3. KTP Perwakilan pada PDF.
-4. Data Kecamatan PBP.
-5. Data Kecamatan Perwakilan.
-6. KK/dokumen identitas yang tersedia pada PDF sebagai bukti pendukung.
+- NOMOR KK SAMA
+- NOMOR KK BERBEDA
+- NOMOR KK TIDAK DAPAT DIVERIFIKASI
 
-PENTING:
+============================================================
+RECHECK
+============================================================
 
-PDF merupakan sumber utama verifikasi.
+Sebelum hasil akhir, pastikan:
 
-Foto PBP / foto dokumentasi penyerahan TIDAK menjadi bagian dari pemeriksaan ini.
+1. PBP benar-benar tercantum dalam KK.
+2. Perwakilan benar-benar tercantum dalam KK.
+3. Nomor KK sudah dibaca secara visual.
+4. Nomor KK PBP dan Perwakilan sama.
+5. Tidak menggunakan alamat/nama keluarga sebagai pengganti nomor KK.
+6. Nama Perwakilan sudah dibandingkan dengan KTP.
+7. NIK sudah dibandingkan digit per digit.
+8. KTP Perwakilan sudah diperiksa secara visual.
+9. Tidak ada data yang ditebak.
+10. Setiap PBP diperiksa individual.
+""",
 
-JANGAN mencari Foto PBP di dalam PDF.
+    # ==========================================================
+    # PERWAKILAN BEDA KK
+    # ==========================================================
+    "Perwakilan Beda KK": """
+ANDA BERTUGAS SEBAGAI VERIFIKATOR DATA BANTUAN PANGAN (BANPANG).
 
-JANGAN menilai:
+Lakukan verifikasi secara OBJEKTIF, DETAIL, INDIVIDUAL, DAN BERDASARKAN BUKTI yang terdapat pada PDF yang saya upload.
 
-- PBP pada foto penyerahan;
-- Perwakilan pada foto penyerahan;
-- KTP pada foto penyerahan;
-- jumlah karung/beras;
-- dokumentasi penyerahan;
-- originalitas Foto PBP.
-
-Fokus verifikasi adalah:
-
-DATA PBP
-↔
-DATA PERWAKILAN
-↔
-KTP PERWAKILAN
-↔
-KECAMATAN.
+KHUSUS UNTUK:
+STATUS PBP = "PERWAKILAN BEDA KK"
 
 ============================================================
 TUJUAN VERIFIKASI
 ============================================================
 
-Memastikan:
+Memastikan bahwa:
 
-1. Nama Perwakilan sesuai dengan KTP Perwakilan.
-2. NIK Perwakilan sesuai dengan KTP Perwakilan.
-3. NIK Perwakilan cocok 16/16 digit.
-4. KTP Perwakilan tersedia dan ASLI.
-5. Kecamatan PBP dapat diverifikasi.
-6. Kecamatan Perwakilan dapat diverifikasi.
-7. Kecamatan PBP dan Kecamatan Perwakilan SAMA.
-8. PBP dan Perwakilan BOLEH berasal dari KK yang berbeda.
-
-============================================================
-SYARAT WAJIB LOLOS
-============================================================
-
-1. Nama Perwakilan sesuai dengan KTP Perwakilan.
-2. NIK Perwakilan sesuai dengan KTP Perwakilan.
-3. NIK Perwakilan cocok 16/16 digit.
-4. KTP Perwakilan tersedia.
-5. KTP Perwakilan teridentifikasi ASLI.
+1. Data PBP dapat diidentifikasi.
+2. Data Perwakilan dapat diidentifikasi.
+3. Nama Perwakilan sesuai dengan KTP Perwakilan.
+4. NIK Perwakilan sesuai dengan KTP Perwakilan.
+5. KTP Perwakilan tersedia dan secara visual merupakan KTP FISIK ASLI.
 6. Kecamatan PBP dapat diverifikasi.
 7. Kecamatan Perwakilan dapat diverifikasi.
-8. Kecamatan PBP = Kecamatan Perwakilan.
-
-KK PBP DAN KK PERWAKILAN TIDAK WAJIB SAMA.
-
-KK berbeda:
-
-→ DIPERBOLEHKAN.
+8. Kecamatan PBP dan Kecamatan Perwakilan SAMA.
 
 ============================================================
-KTP PBP TIDAK WAJIB
+ATURAN UTAMA BEDA KK
 ============================================================
 
-KTP PBP TIDAK WAJIB tersedia.
+PBP dan Perwakilan BOLEH berada dalam KK yang BERBEDA.
 
-Jika KTP PBP tidak tersedia:
+Jadi:
 
-→ BUKAN alasan TIDAK LOLOS.
+KK BERBEDA = DIPERBOLEHKAN.
 
-Jika KTP PBP tersedia:
+Perbedaan nomor KK TIDAK BOLEH dijadikan alasan TIDAK LOLOS.
 
-→ dapat digunakan sebagai bukti tambahan.
+Fokus utama verifikasi kategori ini adalah:
 
-KTP PBP dapat berstatus:
+PBP
++
+Perwakilan
++
+KTP Perwakilan
++
+Kecamatan PBP
++
+Kecamatan Perwakilan.
 
-- ASLI
-- FOTOKOPI
-- TIDAK ADA
-- TIDAK TERBACA
+============================================================
+ATURAN KK
+============================================================
 
-KTP PBP tidak menjadi syarat kelulusan utama kategori BEDA KK.
+KK merupakan BUKTI PENDUKUNG, bukan syarat bahwa nomor KK harus sama.
+
+Pada PDF, dokumen KK yang terlihat umumnya merupakan:
+
+"KK PERWAKILAN"
+
+Jika KK yang terlihat adalah KK Perwakilan, catat nomor KK tersebut sebagai:
+
+KK Perwakilan.
+
+Jangan otomatis menganggap nomor tersebut sebagai KK PBP.
+
+Jika KK PBP tidak tersedia dalam PDF:
+
+KK PBP = TIDAK TERSEDIA.
+
+Jangan mengarang atau menebak KK PBP.
+
+Jika nomor KK Perwakilan terlihat jelas, tuliskan nomor KK tersebut.
 
 ============================================================
 PEMERIKSAAN NAMA PERWAKILAN
@@ -1075,28 +574,19 @@ PEMERIKSAAN NAMA PERWAKILAN
 
 Bandingkan:
 
-NAMA PERWAKILAN PADA DATA
-↔
-NAMA PADA KTP PERWAKILAN.
+Nama Perwakilan pada Data
+VS
+Nama pada KTP Perwakilan.
 
-Tampilkan kedua nama secara lengkap.
+Kategori:
 
-Jika sama:
+- SESUAI
+- BERBEDA
+- TIDAK DAPAT DIVERIFIKASI
 
-→ SESUAI.
+Jika berbeda secara jelas → TIDAK LOLOS.
 
-Jika berbeda secara material:
-
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
-
-Jelaskan secara spesifik perbedaannya.
-
-Jika tidak terbaca:
-
-→ PERLU VERIFIKASI.
-
-JANGAN menebak nama.
+Jangan melakukan normalisasi atau asumsi nama.
 
 ============================================================
 PEMERIKSAAN NIK PERWAKILAN
@@ -1104,420 +594,294 @@ PEMERIKSAAN NIK PERWAKILAN
 
 Bandingkan:
 
-NIK PERWAKILAN PADA DATA
-↔
-NIK PADA KTP PERWAKILAN.
+NIK Perwakilan pada Data
+VS
+NIK pada KTP Perwakilan.
 
-WAJIB membandingkan 16 DIGIT satu per satu.
+Ketentuan:
 
-Jika 16/16 digit sama:
-
-→ SESUAI.
-
-Jika satu digit saja berbeda:
-
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
-
-Sebutkan posisi semua digit yang berbeda.
-
-Contoh:
-
-NIK Perwakilan : 1301055508540001
-NIK KTP        : 1301055508540002
-Detail         : Digit ke-16 berbeda (1 ≠ 2).
-
-Jika digit tidak terbaca:
-
-→ PERLU VERIFIKASI.
-
-JANGAN:
-
-- menebak angka;
-- memperbaiki angka;
-- menganggap typo;
-- menggunakan NIK header/caption sebagai pengganti NIK KTP.
+1. NIK harus 16 digit.
+2. Semua digit harus sama.
+3. Perbedaan satu digit saja → TIDAK LOLOS.
+4. Beberapa digit berbeda → TIDAK LOLOS.
+5. Jika NIK tidak terbaca → PERLU VERIFIKASI.
+6. Jangan menebak digit yang tidak terlihat.
+7. Jika ada perbedaan, tuliskan posisi digit yang berbeda jika dapat ditentukan.
 
 ============================================================
-KTP PERWAKILAN
+PEMERIKSAAN KTP PERWAKILAN
 ============================================================
 
-KTP Perwakilan WAJIB ASLI.
+KTP Perwakilan WAJIB tersedia.
 
-Gunakan:
+Periksa secara VISUAL apakah merupakan KTP FISIK ASLI.
+
+Kategori:
 
 - ASLI
 - FOTOKOPI
 - TIDAK ADA
 - TIDAK TERBACA
 
-ASLI:
+Jika KTP fotokopi → TIDAK LOLOS.
 
-→ SESUAI.
+Jika KTP tidak ada → TIDAK LOLOS.
 
-FOTOKOPI:
+Jika KTP tersedia tetapi tidak dapat ditentukan secara visual → PERLU VERIFIKASI.
 
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
-
-TIDAK ADA:
-
-→ TIDAK LOLOS.
-
-TIDAK TERBACA:
-
-→ PERLU VERIFIKASI.
-
-JANGAN menebak keaslian KTP.
+Jangan menyatakan "ASLI" hanya karena gambar KTP tersedia.
 
 ============================================================
-KK BOLEH BERBEDA
+PEMERIKSAAN KECAMATAN PBP
 ============================================================
 
-PENTING:
+Ambil Kecamatan PBP dari data/dokumen yang tersedia pada PDF.
 
-PBP DAN PERWAKILAN TIDAK HARUS BERADA DALAM KK YANG SAMA.
+Kecamatan harus dapat dibaca secara langsung.
 
-KK PBP ≠ KK PERWAKILAN:
+Jangan menyimpulkan Kecamatan dari:
 
-→ DIPERBOLEHKAN.
+- Kabupaten;
+- Provinsi;
+- alamat yang tidak lengkap;
+- kode wilayah;
+- nama Desa/Nagari saja;
+- asumsi geografis.
 
-JANGAN menyatakan TIDAK LOLOS hanya karena nomor KK berbeda.
+Kategori:
 
-Jika nomor KK tersedia, tampilkan kedua nomor KK untuk dokumentasi.
+- DAPAT DIVERIFIKASI
+- TIDAK DAPAT DIVERIFIKASI
 
-Contoh:
-
-KK PBP:
-1701010000000001
-
-KK Perwakilan:
-1701010000000002
-
-Detail:
-NOMOR KK BERBEDA — DIPERBOLEHKAN UNTUK KATEGORI BEDA KK.
+Jika Kecamatan PBP tidak dapat dibaca dengan jelas → PERLU VERIFIKASI.
 
 ============================================================
-PEMERIKSAAN KECAMATAN
+PEMERIKSAAN KECAMATAN PERWAKILAN
 ============================================================
 
-KECAMATAN adalah syarat WAJIB.
+Verifikasi Kecamatan Perwakilan berdasarkan dokumen yang tersedia, terutama KTP Perwakilan dan/atau dokumen pendukung yang jelas.
+
+Kecamatan harus dapat dibaca secara langsung.
+
+Jangan menyimpulkan Kecamatan dari Kabupaten, Provinsi, alamat yang tidak lengkap, atau asumsi geografis.
+
+Kategori:
+
+- DAPAT DIVERIFIKASI
+- TIDAK DAPAT DIVERIFIKASI
+
+Jika Kecamatan Perwakilan tidak dapat dibaca dengan jelas → PERLU VERIFIKASI.
+
+============================================================
+PERBANDINGAN KECAMATAN
+============================================================
 
 Bandingkan secara langsung:
 
-KECAMATAN PBP
-↔
-KECAMATAN PERWAKILAN.
+Kecamatan PBP
+VS
+Kecamatan Perwakilan.
 
-Tampilkan kedua nilai kecamatan.
+Kategori:
 
-Contoh:
-
-Kecamatan PBP:
-VII KOTO
-
-Kecamatan Perwakilan:
-VII KOTO
-
-Detail:
-KECAMATAN SAMA.
-
-→ SESUAI.
-
-Jika berbeda:
-
-Kecamatan PBP:
-VII KOTO
-
-Kecamatan Perwakilan:
-PATAMUAN
-
-Detail:
-KECAMATAN BERBEDA.
-
-→ TIDAK SESUAI.
-→ TIDAK LOLOS.
-
-Jika kecamatan tidak dapat dipastikan:
-
-→ PERLU VERIFIKASI.
-
-============================================================
-ATURAN KECAMATAN
-============================================================
-
-Kecamatan PBP dan Kecamatan Perwakilan WAJIB sama.
-
-Perbedaan Desa/Kelurahan:
-
-→ DIPERBOLEHKAN selama Kecamatan sama.
-
-Perbedaan alamat:
-
-→ tidak otomatis berarti Kecamatan berbeda.
-
-Kabupaten sama:
-
-→ TIDAK CUKUP untuk menyatakan Kecamatan sama.
-
-Provinsi sama:
-
-→ TIDAK CUKUP untuk menyatakan Kecamatan sama.
-
-JANGAN menyimpulkan Kecamatan berdasarkan perkiraan.
-
-Gunakan data Kecamatan yang benar-benar terlihat atau tercantum dalam dokumen.
-
-============================================================
-PEMERIKSAAN SILANG
-============================================================
-
-Lakukan pemeriksaan silang:
-
-DATA PBP
-↕
-DATA PERWAKILAN
-↕
-KTP PERWAKILAN
-↕
-KECAMATAN.
-
-KK dapat digunakan sebagai informasi tambahan.
-
-Perbedaan KK TIDAK menjadi alasan TIDAK LOLOS dalam kategori BEDA KK.
-
-Yang menjadi syarat adalah:
-
-KECAMATAN PBP = KECAMATAN PERWAKILAN.
-
-============================================================
-HASIL
-============================================================
-
-Gunakan hanya:
-
-- LOLOS
-- TIDAK LOLOS
-- PERLU VERIFIKASI
-
-LOLOS:
-
-Jika seluruh syarat wajib terbukti.
-
-TIDAK LOLOS:
-
-Jika terdapat syarat wajib yang terbukti tidak terpenuhi.
-
-PERLU VERIFIKASI:
-
-Jika bukti tidak cukup jelas untuk menentukan.
-
-============================================================
-OUTPUT WAJIB
-============================================================
-
-WAJIB membuat tabel DETAIL satu baris untuk setiap PBP.
-
-JANGAN hanya menulis "SESUAI" atau "TIDAK SESUAI".
-
-Tampilkan nilai aktual yang dibandingkan dan detail perbedaannya.
-
-Format:
-
-| No | No PBP | Nama PBP | NIK PBP | Kecamatan PBP | Nama Perwakilan | Nama KTP Perwakilan | Detail Nama | NIK Perwakilan | NIK KTP Perwakilan | Detail NIK | KK PBP | KK Perwakilan | Detail KK | Kecamatan Perwakilan | Detail Kecamatan | KTP Perwakilan | HASIL | ALASAN |
-|----|---------|----------|---------|---------------|-----------------|----------------------|-------------|----------------|---------------------|------------|---------|---------------|------------|----------------------|------------------|-----------------|-------|--------|
-
-Detail Nama:
-- SAMA
-- BERBEDA — jelaskan perbedaannya
-- TIDAK DAPAT DIVERIFIKASI
-
-Detail NIK:
-- 16/16 DIGIT SAMA
-- BERBEDA — sebutkan posisi digit yang berbeda
-- TIDAK DAPAT DIVERIFIKASI
-
-Detail KK:
-- SAMA
-- BERBEDA — DIPERBOLEHKAN
-- TIDAK DAPAT DIVERIFIKASI
-
-Detail Kecamatan:
 - SAMA
 - BERBEDA
 - TIDAK DAPAT DIVERIFIKASI
 
-KTP Perwakilan:
-- ASLI
-- FOTOKOPI
-- TIDAK ADA
-- TIDAK TERBACA
+Jika SAMA → memenuhi syarat.
+
+Jika BERBEDA → TIDAK LOLOS.
+
+Jika tidak dapat ditentukan → PERLU VERIFIKASI.
+
+PENTING:
+
+Jangan menganggap dua nama Kecamatan berbeda sebagai sama hanya karena secara administratif/geografis mungkin memiliki hubungan.
+
+Contoh:
+
+"VII KOTO"
+dan
+"VII KOTO SUNGAI SARIK"
+
+HARUS diperlakukan sebagai BERBEDA jika PDF tidak memberikan bukti eksplisit bahwa keduanya adalah nama yang sama.
+
+Jangan melakukan normalisasi nama Kecamatan.
 
 ============================================================
-CONTOH OUTPUT
+KETENTUAN DESA / NAGARI
 ============================================================
 
-Contoh LOLOS:
+Desa/Nagari PBP dan Perwakilan BOLEH berbeda.
 
-Nama Perwakilan:
-MUHAMMAD HADI
+Perbedaan Desa/Nagari bukan alasan TIDAK LOLOS selama Kecamatan terbukti sama.
 
-Nama KTP:
-MUHAMMAD HADI
+Sebaliknya:
 
-Detail Nama:
-SAMA
-
-NIK Perwakilan:
-1301055508540001
-
-NIK KTP:
-1301055508540001
-
-Detail NIK:
-16/16 DIGIT SAMA
-
-KK PBP:
-1701010000000001
-
-KK Perwakilan:
-1701010000000002
-
-Detail KK:
-BERBEDA — DIPERBOLEHKAN UNTUK KATEGORI BEDA KK.
-
-Kecamatan PBP:
-VII KOTO
-
-Kecamatan Perwakilan:
-VII KOTO
-
-Detail Kecamatan:
-SAMA
-
-KTP Perwakilan:
-ASLI
-
-HASIL:
-LOLOS.
-
-Contoh TIDAK LOLOS:
-
-Kecamatan PBP:
-VII KOTO
-
-Kecamatan Perwakilan:
-PATAMUAN
-
-Detail Kecamatan:
-BERBEDA.
-
-Karena Kecamatan PBP dan Kecamatan Perwakilan wajib sama, maka PBP TIDAK LOLOS.
-
-Contoh PERLU VERIFIKASI:
-
-Kecamatan PBP:
-VII KOTO
-
-Kecamatan Perwakilan:
-VII KOT?
-
-Detail Kecamatan:
-Tidak dapat dipastikan karena data Kecamatan Perwakilan tidak terbaca.
-
-HASIL:
-PERLU VERIFIKASI.
+Kabupaten yang sama TIDAK cukup untuk membuktikan Kecamatan sama.
 
 ============================================================
-REKAPITULASI
+PEMERIKSAAN KK PERWAKILAN
 ============================================================
 
-| HASIL | JUMLAH | PERSENTASE |
-|-------|-------:|------------:|
-| LOLOS | ... | ...% |
-| TIDAK LOLOS | ... | ...% |
-| PERLU VERIFIKASI | ... | ...% |
-| TOTAL | ... | 100% |
+Jika terdapat KK dalam PDF:
 
-Pastikan:
+WAJIB periksa secara visual.
 
-LOLOS + TIDAK LOLOS + PERLU VERIFIKASI = TOTAL PBP.
+Catat:
 
-============================================================
-KESIMPULAN
-============================================================
+- Nomor KK Perwakilan.
+- Nama Perwakilan.
+- NIK Perwakilan jika terlihat.
+- Alamat jika terlihat.
+- Kecamatan jika terlihat.
 
-"Jumlah PBP yang memenuhi seluruh persyaratan kategori PERWAKILAN BEDA KK adalah ... PBP."
+Jika nomor KK terlihat jelas → tuliskan nomor KK.
 
-Jika terdapat PBP TIDAK LOLOS atau PERLU VERIFIKASI, berikan ringkasan penyebabnya.
+Jika nomor KK tidak terbaca → TIDAK DAPAT DIVERIFIKASI.
 
-============================================================
-PEMERIKSAAN ULANG
-============================================================
-
-Setelah seluruh PBP diperiksa, lakukan CHECK ULANG khusus terhadap:
-
-1. Nama Perwakilan berbeda.
-2. NIK Perwakilan berbeda satu digit.
-3. NIK Perwakilan berbeda lebih dari satu digit.
-4. Digit NIK tidak terbaca.
-5. KTP Perwakilan fotokopi.
-6. KTP Perwakilan tidak ada.
-7. KTP Perwakilan tidak terbaca.
-8. Kecamatan PBP berbeda dengan Kecamatan Perwakilan.
-9. Kecamatan tidak dapat dipastikan.
-10. Data Kecamatan hanya berdasarkan perkiraan.
-11. Nomor KK berbeda — pastikan tidak salah dianggap sebagai alasan TIDAK LOLOS.
-
-JANGAN memberikan LOLOS sebelum seluruh pemeriksaan ulang selesai.
+Jika KK PBP tidak tersedia → jangan mengarang.
 
 ============================================================
-ATURAN MUTLAK
+DETAIL KK
 ============================================================
 
-JANGAN MENGADA-ADA DATA.
+Gunakan:
 
-JANGAN MENEBak NAMA.
+- SAMA
+- BERBEDA — DIPERBOLEHKAN
+- TIDAK DAPAT DIVERIFIKASI
 
-JANGAN MENEBak NIK.
+Jika hanya KK Perwakilan yang tersedia:
 
-JANGAN MENEBak NOMOR KK.
+KK PBP = TIDAK TERSEDIA
+KK Perwakilan = nomor KK yang terlihat.
 
-JANGAN MENEBak KECAMATAN.
+Detail KK tidak boleh menyebabkan TIDAK LOLOS hanya karena nomor KK berbeda.
 
-JANGAN MENEBak keaslian KTP.
+============================================================
+KTP PBP
+============================================================
 
-NIK WAJIB 16/16 DIGIT SAMA.
+KTP PBP TIDAK WAJIB untuk kategori PERWAKILAN BEDA KK.
 
-SATU DIGIT BERBEDA = TIDAK LOLOS.
+KTP PBP:
 
-KTP PERWAKILAN WAJIB ASLI.
+- Tidak ada → bukan otomatis TIDAK LOLOS.
+- Fotokopi → bukan otomatis TIDAK LOLOS.
+- Ada → dapat digunakan sebagai bukti tambahan.
 
-KTP PBP TIDAK WAJIB.
+Jangan menjadikan KTP PBP sebagai syarat wajib.
 
-PBP DAN PERWAKILAN BOLEH BERADA DALAM KK YANG BERBEDA.
+============================================================
+PEMERIKSAAN VISUAL PDF
+============================================================
 
-KK BERBEDA BUKAN ALASAN TIDAK LOLOS.
+WAJIB memeriksa gambar/dokumen dalam PDF secara VISUAL.
 
-KECAMATAN PBP DAN KECAMATAN PERWAKILAN WAJIB SAMA.
+Jangan hanya mengandalkan text layer.
 
-JANGAN menganggap Kabupaten yang sama berarti Kecamatan yang sama.
+Khusus:
 
-JANGAN menggunakan Foto PBP sebagai dasar verifikasi kategori ini.
+- KTP Perwakilan;
+- KK Perwakilan;
+- dokumen yang memuat Kecamatan;
+- dokumen identitas lainnya.
 
-JANGAN mencari Foto PBP di dalam PDF.
+Baca informasi dari gambar secara langsung.
 
-FOKUS UTAMA:
+Jika informasi tidak jelas, jangan menebak.
 
-DATA PBP
-↔
-DATA PERWAKILAN
-↔
-KTP PERWAKILAN
-↔
-KECAMATAN.
+============================================================
+HASIL AKHIR
+============================================================
 
-HASIL AKHIR HARUS BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF."""
+Gunakan HANYA:
+
+1. LOLOS
+2. TIDAK LOLOS
+3. PERLU VERIFIKASI
+
+LOLOS jika:
+
+1. Nama Perwakilan sesuai dengan KTP.
+2. NIK Perwakilan sesuai dengan KTP.
+3. NIK 16 digit.
+4. KTP Perwakilan tersedia.
+5. KTP Perwakilan secara visual merupakan KTP fisik asli.
+6. Kecamatan PBP dapat diverifikasi.
+7. Kecamatan Perwakilan dapat diverifikasi.
+8. Kecamatan PBP = Kecamatan Perwakilan.
+9. Tidak terdapat bukti lain yang bertentangan.
+
+TIDAK LOLOS jika:
+
+- Nama Perwakilan terbukti berbeda;
+- NIK Perwakilan terbukti berbeda;
+- NIK tidak memenuhi ketentuan;
+- KTP Perwakilan fotokopi;
+- KTP Perwakilan tidak ada;
+- Kecamatan PBP dan Perwakilan terbukti berbeda.
+
+PERLU VERIFIKASI jika:
+
+- Kecamatan tidak dapat dibaca;
+- NIK tidak dapat dibaca;
+- nama tidak dapat dibaca;
+- KTP tidak dapat ditentukan;
+- atau bukti lainnya tidak cukup untuk menentukan hasil.
+
+============================================================
+FORMAT OUTPUT
+============================================================
+
+Buat tabel:
+
+No | No PBP | Nama PBP | NIK PBP | Kecamatan PBP | Nama Perwakilan | Nama KTP Perwakilan | Detail Nama | NIK Perwakilan | NIK KTP Perwakilan | Detail NIK | KK PBP | KK Perwakilan | Detail KK | Kecamatan Perwakilan | Detail Kecamatan | KTP Perwakilan | HASIL | ALASAN
+
+============================================================
+DETAIL KECAMATAN
+============================================================
+
+Gunakan:
+
+- SAMA
+- BERBEDA
+- TIDAK DAPAT DIVERIFIKASI
+
+============================================================
+DETAIL KK
+============================================================
+
+Gunakan:
+
+- SAMA
+- BERBEDA — DIPERBOLEHKAN
+- TIDAK DAPAT DIVERIFIKASI
+
+============================================================
+RECHECK
+============================================================
+
+Sebelum memberikan hasil akhir, lakukan pemeriksaan ulang:
+
+1. Nama Perwakilan sudah dibandingkan dengan KTP.
+2. NIK sudah dibandingkan digit per digit.
+3. NIK sudah dipastikan 16 digit.
+4. KTP Perwakilan sudah diperiksa secara visual.
+5. Kecamatan PBP sudah dibaca dari bukti yang tersedia.
+6. Kecamatan Perwakilan sudah dibaca dari bukti yang tersedia.
+7. Kecamatan dibandingkan secara langsung.
+8. Jangan menyamakan nama Kecamatan yang berbeda tanpa bukti eksplisit.
+9. Perbedaan KK TIDAK boleh dijadikan alasan TIDAK LOLOS.
+10. Desa/Nagari yang berbeda tetapi Kecamatan sama tetap dapat LOLOS.
+11. Kabupaten yang sama saja tidak cukup untuk menyatakan Kecamatan sama.
+12. KK yang terlihat dibaca sebagai KK Perwakilan jika memang dokumen tersebut adalah KK Perwakilan.
+13. Jangan mengarang KK PBP jika tidak tersedia.
+14. Jangan mengarang atau menebak data apa pun.
+15. Setiap PBP harus diverifikasi secara INDIVIDUAL.
+16. Pastikan tidak ada PBP yang terlewat.
+"""
 }
 
 class VerifikasiBanpangPage(ctk.CTkFrame):
