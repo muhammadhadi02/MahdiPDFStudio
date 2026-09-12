@@ -34,122 +34,324 @@ from core.services.banpang_pdf_service import BanpangPDFService
 # ==========================================================
 # PROMPT VERIFIKASI CHATGPT
 # ==========================================================
+
 PROMPT_VERIFIKASI = {
+
+    # ======================================================
+    # NORMAL
+    # ======================================================
     "Normal": """ANDA BERTUGAS SEBAGAI VERIFIKATOR DATA BANTUAN PANGAN (BANPANG).
 
-Lakukan verifikasi secara objektif terhadap data PBP dan seluruh dokumentasi foto yang terdapat dalam PDF yang saya upload.
+Lakukan verifikasi secara OBJEKTIF, DETAIL, INDIVIDUAL, DAN BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF YANG SAYA UPLOAD.
 
 KHUSUS UNTUK:
+
 STATUS PBP = "NORMAL"
 
-TUJUAN VERIFIKASI:
-Memastikan identitas PBP pada data PDF sesuai dengan KTP dan dokumentasi penyerahan memenuhi seluruh persyaratan.
-
-SYARAT LOLOS:
-1. Nama PBP pada PDF harus sama dengan nama pada Foto KTP PBP.
-2. NIK PBP pada PDF harus sama dengan NIK pada Foto KTP PBP.
-3. Foto KTP PBP WAJIB merupakan KTP ASLI, bukan fotokopi.
-4. Foto PBP WAJIB memperlihatkan PBP bersama KTP dan 3 beras/karung beras dengan jelas.
-
-Jika salah satu syarat wajib tidak terpenuhi, HASIL tidak boleh LOLOS.
-
 ============================================================
-PEMERIKSAAN NAMA DAN NIK
+SUMBER BUKTI
 ============================================================
 
-Bandingkan data PDF dengan Foto KTP PBP:
+Untuk verifikasi kategori NORMAL, gunakan:
 
-- Nama PBP pada PDF ↔ Nama pada KTP.
-- NIK PBP pada PDF ↔ NIK pada KTP.
+1. Data PBP yang tercantum pada PDF.
+2. Foto KTP PBP yang tercantum pada PDF.
 
-NIK merupakan identitas utama dan WAJIB cocok.
+PENTING:
 
-Jika NIK berbeda:
+PDF merupakan sumber utama verifikasi.
+
+Foto PBP / foto dokumentasi penyerahan TIDAK menjadi bagian dari pemeriksaan ini.
+
+JANGAN mencari Foto PBP di dalam PDF.
+
+JANGAN meminta atau mengasumsikan adanya Foto PBP.
+
+JANGAN menilai:
+
+- keberadaan PBP pada foto penyerahan;
+- KTP pada foto penyerahan;
+- jumlah karung/beras;
+- dokumentasi penyerahan;
+- originalitas Foto PBP.
+
+Fokus verifikasi adalah:
+
+DATA PBP
+↔
+KTP PBP.
+
+============================================================
+TUJUAN VERIFIKASI
+============================================================
+
+Memastikan:
+
+1. Nama PBP pada data sesuai dengan nama pada KTP PBP.
+2. NIK PBP pada data sesuai dengan NIK pada KTP PBP.
+3. NIK cocok 16/16 digit.
+4. KTP PBP tersedia.
+5. KTP PBP dapat dinilai sebagai ASLI.
+6. Tidak terdapat perbedaan identitas yang material.
+
+============================================================
+SYARAT WAJIB LOLOS
+============================================================
+
+PBP hanya dapat dinyatakan LOLOS apabila seluruh syarat berikut terbukti:
+
+1. Nama PBP sesuai dengan nama pada KTP PBP.
+2. NIK PBP sesuai dengan NIK pada KTP PBP.
+3. NIK cocok 16/16 digit.
+4. KTP PBP tersedia.
+5. KTP PBP teridentifikasi sebagai ASLI.
+6. Tidak terdapat perbedaan identitas material lainnya.
+
+Jika salah satu syarat wajib terbukti tidak terpenuhi:
+
 → TIDAK LOLOS.
 
-Jika nama berbeda secara material:
-→ TIDAK LOLOS.
+Jika bukti tersedia tetapi tidak cukup jelas untuk menentukan:
 
-Jika nama atau NIK tidak terbaca:
 → PERLU VERIFIKASI.
 
-Jangan menebak nama atau NIK yang tidak terlihat jelas.
-
 ============================================================
-KTP PBP WAJIB ASLI
+PEMERIKSAAN NAMA
 ============================================================
 
-Periksa secara visual apakah Foto KTP menunjukkan KTP ASLI.
+Bandingkan secara langsung:
 
-Jika KTP terlihat asli:
+NAMA PBP PADA DATA
+↔
+NAMA PADA KTP PBP.
+
+Tampilkan kedua nama secara lengkap.
+
+Contoh:
+
+Nama PBP : MUHAMMAD HADI PUTRA
+Nama KTP : MUHAMMAD HADI PUTRA
+Detail   : SAMA
+
 → SESUAI.
 
-Jika KTP terlihat berupa fotokopi:
+Jika berbeda:
+
+Nama PBP : MUHAMMAD HADI
+Nama KTP : MUHAMMAD HADI PUTRA
+Detail   : BERBEDA — terdapat tambahan nama "PUTRA" pada KTP.
+
 → TIDAK SESUAI.
-→ HASIL = TIDAK LOLOS.
+→ TIDAK LOLOS.
 
-Jika keaslian KTP tidak dapat dipastikan karena kualitas foto:
-→ TIDAK DAPAT DIVERIFIKASI.
-→ HASIL = PERLU VERIFIKASI.
+Jika perbedaan hanya berupa format penulisan yang tidak material, jelaskan secara spesifik.
 
-Jangan menebak keaslian KTP.
+JANGAN otomatis menganggap dua nama berbeda sebagai sama.
+
+Jika nama tidak terbaca:
+
+→ PERLU VERIFIKASI.
+
+JANGAN menebak nama.
 
 ============================================================
-FOTO PBP
+PEMERIKSAAN NIK
 ============================================================
 
-Foto PBP WAJIB memperlihatkan:
+NIK adalah identitas utama.
 
-1. PBP/orang yang menerima bantuan.
-2. KTP PBP.
-3. 3 beras/karung beras.
+Bandingkan:
 
-Ketiga komponen tersebut harus terlihat dengan jelas.
+NIK PBP PADA DATA
+↔
+NIK YANG TERLIHAT PADA KTP PBP.
 
-Jika PBP tidak terlihat:
+WAJIB membandingkan 16 DIGIT satu per satu dari kiri ke kanan.
+
+Tampilkan kedua NIK secara lengkap apabila terbaca.
+
+Jika 16/16 digit sama:
+
+NIK PBP : 1301055508540001
+NIK KTP : 1301055508540001
+Detail  : 16/16 DIGIT SAMA.
+
+→ SESUAI.
+
+Jika terdapat perbedaan:
+
+NIK PBP : 1301055508540001
+NIK KTP : 1301055508540002
+Detail  : Digit ke-16 berbeda (1 ≠ 2).
+
+→ TIDAK SESUAI.
 → TIDAK LOLOS.
 
-Jika KTP tidak terlihat:
+Jika lebih dari satu digit berbeda, sebutkan SEMUA posisi digit yang berbeda.
+
+Contoh:
+
+Detail:
+- Digit ke-8 berbeda (5 ≠ 4).
+- Digit ke-15 berbeda (0 ≠ 2).
+
 → TIDAK LOLOS.
 
-Jika 3 beras tidak terlihat:
-→ TIDAK LOLOS.
+JANGAN:
 
-Jika foto terlalu buram, gelap, kecil, atau terpotong sehingga salah satu komponen tidak dapat dipastikan:
+- menebak angka;
+- memperbaiki angka;
+- menganggap typo;
+- menganggap angka mirip sebagai sama;
+- menggunakan NIK header/caption sebagai pengganti NIK KTP.
+
+Jika satu atau beberapa digit tidak terbaca:
+
 → PERLU VERIFIKASI.
 
 ============================================================
-KLASIFIKASI HASIL
+KETENTUAN NIK
+============================================================
+
+NIK WAJIB:
+
+- berjumlah 16 digit;
+- dapat dibaca;
+- dan cocok 16/16 digit dengan KTP.
+
+Kurang dari 16 digit:
+
+→ TIDAK SESUAI.
+
+Lebih dari 16 digit:
+
+→ TIDAK SESUAI.
+
+16 digit tetapi terdapat perbedaan:
+
+→ TIDAK SESUAI.
+→ TIDAK LOLOS.
+
+Jika digit tidak dapat dibaca:
+
+→ PERLU VERIFIKASI.
+
+============================================================
+KTP PBP
+============================================================
+
+KTP PBP WAJIB tersedia.
+
+Gunakan status:
+
+- ASLI
+- FOTOKOPI
+- TIDAK ADA
+- TIDAK TERBACA
+
+ASLI:
+
+→ SESUAI.
+
+FOTOKOPI:
+
+→ TIDAK SESUAI.
+→ TIDAK LOLOS.
+
+TIDAK ADA:
+
+→ TIDAK LOLOS.
+
+TIDAK TERBACA:
+
+→ PERLU VERIFIKASI.
+
+JANGAN menebak keaslian KTP.
+
+Penilaian ASLI/FOTOKOPI hanya dilakukan berdasarkan karakteristik visual dokumen yang terlihat.
+
+Jangan menyatakan KTP ASLI apabila bukti visual tidak cukup untuk mendukung kesimpulan tersebut.
+
+============================================================
+PEMERIKSAAN SILANG IDENTITAS
+============================================================
+
+Lakukan pemeriksaan silang:
+
+DATA PBP
+↕
+KTP PBP
+
+Periksa sekurang-kurangnya:
+
+1. Nama.
+2. NIK.
+3. Kesesuaian identitas secara keseluruhan.
+
+JANGAN memberikan LOLOS hanya karena nama sama.
+
+NIK tetap WAJIB diperiksa 16/16 digit.
+
+============================================================
+HASIL
 ============================================================
 
 Gunakan hanya:
+
 - LOLOS
 - TIDAK LOLOS
 - PERLU VERIFIKASI
 
-LOLOS hanya jika seluruh syarat berikut terpenuhi:
-✓ Nama PBP sesuai.
-✓ NIK PBP sesuai.
-✓ KTP PBP tersedia.
-✓ KTP PBP ASLI.
-✓ PBP terlihat pada Foto PBP.
-✓ KTP terlihat pada Foto PBP.
-✓ 3 beras terlihat jelas pada Foto PBP.
+LOLOS:
 
-TIDAK LOLOS jika terdapat persyaratan wajib yang tidak terpenuhi.
+Hanya jika SEMUA syarat wajib terbukti terpenuhi.
 
-PERLU VERIFIKASI jika bukti tersedia tetapi kualitas foto/dokumen tidak cukup untuk memastikan kebenarannya.
+TIDAK LOLOS:
+
+Jika terdapat syarat wajib yang TERBUKTI tidak terpenuhi.
+
+PERLU VERIFIKASI:
+
+Jika bukti tersedia tetapi tidak cukup jelas untuk menentukan terpenuhi atau tidak terpenuhi.
 
 ============================================================
 OUTPUT WAJIB
 ============================================================
 
-Buat hasil akhir dalam tabel:
+WAJIB membuat tabel DETAIL satu baris untuk setiap PBP.
 
-| No | No PBP | Nama PBP | NIK PBP | Nama KTP | NIK KTP | KTP PBP | PBP pada Foto | KTP pada Foto | 3 Beras | HASIL | ALASAN |
-|----|---------|----------|---------|----------|---------|---------|---------------|---------------|---------|-------|--------|
+JANGAN hanya menulis "SESUAI" atau "TIDAK SESUAI".
 
-Gunakan nilai:
+Tampilkan NILAI YANG DIBANDINGKAN dan DETAIL PERBEDAANNYA.
+
+Format tabel:
+
+| No | No PBP | Nama PBP | Nama KTP | Detail Nama | NIK PBP | NIK KTP | Detail NIK | KTP PBP | HASIL | ALASAN |
+|----|---------|----------|----------|-------------|---------|---------|------------|---------|-------|--------|
+
+Kolom:
+
+Nama PBP:
+→ tuliskan nama yang terdapat pada data PBP.
+
+Nama KTP:
+→ tuliskan nama yang benar-benar terlihat pada KTP.
+
+Detail Nama:
+- SAMA
+- BERBEDA — jelaskan perbedaannya
+- TIDAK DAPAT DIVERIFIKASI
+
+NIK PBP:
+→ tuliskan NIK pada data PBP.
+
+NIK KTP:
+→ tuliskan NIK yang terlihat pada KTP.
+
+Detail NIK:
+- 16/16 DIGIT SAMA
+- BERBEDA — sebutkan posisi digit yang berbeda
+- TIDAK DAPAT DIVERIFIKASI
 
 KTP PBP:
 - ASLI
@@ -157,437 +359,1166 @@ KTP PBP:
 - TIDAK ADA
 - TIDAK TERBACA
 
-PBP pada Foto:
-- ADA
-- TIDAK ADA
-- TIDAK JELAS
-
-KTP pada Foto:
-- ADA
-- TIDAK ADA
-- TIDAK JELAS
-
-3 Beras:
-- JELAS
-- TIDAK JELAS
-- TIDAK TERLIHAT
-
 HASIL:
 - LOLOS
 - TIDAK LOLOS
 - PERLU VERIFIKASI
 
-ALASAN harus singkat, spesifik, dan berdasarkan bukti.
+============================================================
+CONTOH OUTPUT
+============================================================
 
-Contoh LOLOS:
-"Nama dan NIK PBP sesuai dengan KTP. KTP terlihat asli. Foto PBP memperlihatkan PBP bersama KTP dan 3 beras dengan jelas."
+Contoh 1:
 
-Contoh TIDAK LOLOS:
-"KTP PBP terlihat berupa fotokopi, sedangkan KTP PBP wajib asli."
+| 1 | 001 | MUHAMMAD HADI | MUHAMMAD HADI | SAMA | 1301055508540001 | 1301055508540001 | 16/16 DIGIT SAMA | ASLI | LOLOS | Nama dan NIK sesuai, KTP teridentifikasi ASLI. |
 
-Contoh PERLU VERIFIKASI:
-"Keaslian KTP tidak dapat dipastikan karena foto terlalu buram."
+Contoh 2:
+
+| 2 | 002 | MUHAMMAD HADI | MUHAMMAD HADI | SAMA | 1301055508540001 | 1301055508540002 | Digit ke-16 berbeda (1 ≠ 2) | ASLI | TIDAK LOLOS | NIK PBP dan NIK KTP berbeda pada digit ke-16. |
+
+Contoh 3:
+
+| 3 | 003 | MUHAMMAD HADI | MUHAMMAD HADI PUTRA | BERBEDA — terdapat tambahan "PUTRA" | 1301055508540001 | 1301055508540001 | 16/16 DIGIT SAMA | ASLI | TIDAK LOLOS | Nama PBP berbeda secara material dengan nama pada KTP. |
+
+Contoh 4:
+
+| 4 | 004 | MUHAMMAD HADI | MUHAMMAD HADI | SAMA | 1301055508540001 | 13010555?8540001 | Digit ke-9 tidak terbaca | ASLI | PERLU VERIFIKASI | Satu digit NIK pada KTP tidak dapat dipastikan. |
 
 ============================================================
 REKAPITULASI
 ============================================================
 
-Setelah seluruh PBP selesai diverifikasi, buat rekap:
+| HASIL | JUMLAH | PERSENTASE |
+|-------|-------:|------------:|
+| LOLOS | ... | ...% |
+| TIDAK LOLOS | ... | ...% |
+| PERLU VERIFIKASI | ... | ...% |
+| TOTAL | ... | 100% |
 
-Total PBP:
-- LOLOS:
-- TIDAK LOLOS:
-- PERLU VERIFIKASI:
+Pastikan:
 
-Persentase:
-- LOLOS:
-- TIDAK LOLOS:
-- PERLU VERIFIKASI:
+LOLOS + TIDAK LOLOS + PERLU VERIFIKASI = TOTAL PBP.
 
-KESIMPULAN:
-Jumlah PBP yang memenuhi seluruh persyaratan kategori NORMAL adalah ... PBP.
+PERSENTASE dihitung berdasarkan TOTAL PBP.
 
 ============================================================
-ATURAN TERAKHIR
+KESIMPULAN
+============================================================
+
+Tuliskan:
+
+"Jumlah PBP yang memenuhi seluruh persyaratan kategori NORMAL adalah ... PBP."
+
+Tambahkan ringkasan penyebab TIDAK LOLOS dan PERLU VERIFIKASI apabila ada.
+
+============================================================
+PEMERIKSAAN ULANG
+============================================================
+
+Setelah seluruh PBP diperiksa, lakukan CHECK ULANG khusus terhadap:
+
+1. Nama berbeda.
+2. NIK kurang dari 16 digit.
+3. NIK lebih dari 16 digit.
+4. NIK berbeda satu digit.
+5. NIK berbeda lebih dari satu digit.
+6. Digit NIK tidak terbaca.
+7. KTP fotokopi.
+8. KTP tidak ada.
+9. KTP tidak terbaca.
+10. Identitas tidak dapat dipastikan.
+
+JANGAN memberikan LOLOS sebelum seluruh pemeriksaan ulang selesai.
+
+============================================================
+ATURAN MUTLAK
 ============================================================
 
 JANGAN MENGADA-ADA DATA.
+
 JANGAN MENEBak NAMA.
+
 JANGAN MENEBak NIK.
+
 JANGAN MENEBak keaslian KTP.
-JANGAN menyatakan LOLOS hanya karena nama terlihat sama.
 
-Lakukan pemeriksaan teks terhadap data PDF dan pemeriksaan visual terhadap foto.
-HASIL AKHIR HARUS BERDASARKAN BUKTI YANG TERLIHAT PADA PDF.""",
+JANGAN memperbaiki data yang terlihat salah.
 
+NIK WAJIB 16/16 DIGIT SAMA.
+
+SATU DIGIT BERBEDA = TIDAK LOLOS.
+
+KTP PBP WAJIB ASLI.
+
+JANGAN menggunakan Foto PBP sebagai dasar verifikasi kategori NORMAL.
+
+JANGAN mencari Foto PBP di dalam PDF.
+
+FOKUS UTAMA:
+
+DATA PBP
+↔
+KTP PBP.
+
+HASIL AKHIR HARUS BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF.""",
+
+
+    # ======================================================
+    # PERWAKILAN 1 KK
+    # ======================================================
     "Perwakilan 1 KK": """ANDA BERTUGAS SEBAGAI VERIFIKATOR DATA BANTUAN PANGAN (BANPANG).
 
-Lakukan verifikasi secara objektif terhadap seluruh data dan dokumentasi yang terdapat dalam PDF yang saya upload.
+Lakukan verifikasi secara OBJEKTIF, DETAIL, INDIVIDUAL, DAN BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF YANG SAYA UPLOAD.
 
 KHUSUS UNTUK:
+
 STATUS PBP = "PERWAKILAN 1 KK"
 
-TUJUAN VERIFIKASI:
-Memastikan PBP dan Perwakilan merupakan anggota dalam KK yang sama serta dokumentasi penyerahan memenuhi seluruh persyaratan.
+============================================================
+SUMBER BUKTI
+============================================================
 
-SYARAT LOLOS:
-1. Nama dan NIK PBP pada PDF harus sesuai dengan KTP PBP.
-2. Nama dan NIK Perwakilan pada PDF harus sesuai dengan KTP Perwakilan.
-3. PBP dan Perwakilan harus tercatat dalam KK yang sama.
-4. KTP PBP WAJIB ASLI.
-5. KTP Perwakilan boleh ASLI atau FOTOKOPI.
-6. Harus tersedia KTP PBP, KTP Perwakilan, dan KK.
-7. Foto PBP WAJIB memperlihatkan 2 KTP, KK, dan 3 beras/karung beras dengan jelas.
+Gunakan:
 
-NIK PBP, NIK Perwakilan, dan nomor KK harus diverifikasi berdasarkan bukti yang terlihat.
+1. Data PBP pada PDF.
+2. Data Perwakilan pada PDF.
+3. KTP Perwakilan pada PDF.
+4. KK/dokumen keluarga yang tersedia pada PDF.
 
-Jika salah satu syarat wajib tidak terpenuhi, HASIL tidak boleh LOLOS.
+PENTING:
+
+PDF merupakan sumber utama verifikasi.
+
+Foto PBP / foto dokumentasi penyerahan TIDAK menjadi bagian dari pemeriksaan ini.
+
+JANGAN mencari Foto PBP di dalam PDF.
+
+JANGAN menilai:
+
+- PBP pada foto penyerahan;
+- Perwakilan pada foto penyerahan;
+- KTP pada foto penyerahan;
+- jumlah karung/beras;
+- dokumentasi penyerahan;
+- originalitas Foto PBP.
+
+Fokus verifikasi adalah:
+
+DATA PBP
+↔
+DATA PERWAKILAN
+↔
+KTP PERWAKILAN
+↔
+KK.
 
 ============================================================
-KESESUAIAN DATA PBP
+TUJUAN VERIFIKASI
+============================================================
+
+Memastikan:
+
+1. Nama Perwakilan sesuai dengan KTP Perwakilan.
+2. NIK Perwakilan sesuai dengan KTP Perwakilan.
+3. NIK Perwakilan cocok 16/16 digit.
+4. KTP Perwakilan tersedia dan ASLI.
+5. PBP tercantum dalam KK.
+6. Perwakilan tercantum dalam KK.
+7. PBP dan Perwakilan berada dalam KK yang SAMA.
+
+============================================================
+SYARAT WAJIB LOLOS
+============================================================
+
+1. Nama Perwakilan sesuai dengan KTP Perwakilan.
+2. NIK Perwakilan sesuai dengan KTP Perwakilan.
+3. NIK Perwakilan cocok 16/16 digit.
+4. KTP Perwakilan tersedia.
+5. KTP Perwakilan teridentifikasi ASLI.
+6. PBP tercantum sebagai anggota KK.
+7. Perwakilan tercantum sebagai anggota KK.
+8. Nomor KK PBP dan nomor KK Perwakilan sama.
+9. Hubungan data PBP dan Perwakilan dapat dibuktikan melalui KK.
+
+Jika salah satu syarat wajib terbukti tidak terpenuhi:
+
+→ TIDAK LOLOS.
+
+Jika bukti tidak cukup jelas:
+
+→ PERLU VERIFIKASI.
+
+============================================================
+KTP PBP TIDAK WAJIB ASLI
+============================================================
+
+KTP PBP TIDAK menjadi syarat utama kategori PERWAKILAN 1 KK.
+
+Jika KTP PBP tidak tersedia:
+
+→ BUKAN alasan TIDAK LOLOS.
+
+Jika KTP PBP tersedia:
+
+→ dapat digunakan sebagai bukti tambahan.
+
+KTP PBP dapat berstatus:
+
+- ASLI
+- FOTOKOPI
+- TIDAK ADA
+- TIDAK TERBACA
+
+JANGAN menyatakan TIDAK LOLOS hanya karena KTP PBP tidak tersedia atau berupa fotokopi.
+
+============================================================
+PEMERIKSAAN NAMA PERWAKILAN
 ============================================================
 
 Bandingkan:
-- Nama PBP pada PDF ↔ Nama pada KTP PBP.
-- NIK PBP pada PDF ↔ NIK pada KTP PBP.
 
-Jika NIK berbeda atau nama berbeda secara material:
-→ TIDAK LOLOS.
+NAMA PERWAKILAN PADA DATA
+↔
+NAMA PADA KTP PERWAKILAN.
 
-Jika tidak terbaca:
-→ PERLU VERIFIKASI.
+Tampilkan kedua nama secara lengkap.
 
-============================================================
-KESESUAIAN DATA PERWAKILAN
-============================================================
+Jika sama:
 
-Bandingkan:
-- Nama Perwakilan pada PDF ↔ Nama pada KTP Perwakilan.
-- NIK Perwakilan pada PDF ↔ NIK pada KTP Perwakilan.
-
-Jika NIK berbeda atau nama berbeda secara material:
-→ TIDAK LOLOS.
-
-Jika tidak terbaca:
-→ PERLU VERIFIKASI.
-
-============================================================
-KESESUAIAN KK
-============================================================
-
-PBP dan Perwakilan WAJIB menjadi anggota dalam KK yang sama.
-
-Verifikasi:
-- Nomor KK.
-- Nama PBP pada KK.
-- Nama Perwakilan pada KK.
-
-Nomor KK harus benar-benar terlihat dan dapat diverifikasi.
-
-Jika nomor KK PBP dan Perwakilan berbeda:
-→ TIDAK LOLOS.
-
-Jika nomor KK tidak terbaca:
-→ PERLU VERIFIKASI.
-
-Jangan menyimpulkan satu KK hanya berdasarkan nama keluarga atau alamat.
-
-============================================================
-KTP PBP WAJIB ASLI
-============================================================
-
-Jika KTP PBP terlihat ASLI:
 → SESUAI.
 
-Jika KTP PBP terlihat FOTOKOPI:
-→ TIDAK SESUAI.
-→ HASIL = TIDAK LOLOS.
+Jika berbeda secara material:
 
-Jika keaslian tidak dapat dipastikan:
+→ TIDAK SESUAI.
+→ TIDAK LOLOS.
+
+Jelaskan secara spesifik perbedaannya.
+
+Jika tidak terbaca:
+
 → PERLU VERIFIKASI.
+
+JANGAN menebak nama.
+
+============================================================
+PEMERIKSAAN NIK PERWAKILAN
+============================================================
+
+Bandingkan:
+
+NIK PERWAKILAN PADA DATA
+↔
+NIK PADA KTP PERWAKILAN.
+
+WAJIB membandingkan 16 DIGIT satu per satu.
+
+Jika 16/16 digit sama:
+
+→ SESUAI.
+
+Jika satu digit saja berbeda:
+
+→ TIDAK SESUAI.
+→ TIDAK LOLOS.
+
+Sebutkan posisi semua digit yang berbeda.
+
+Contoh:
+
+NIK Perwakilan : 1301055508540001
+NIK KTP        : 1301055508540002
+Detail         : Digit ke-16 berbeda (1 ≠ 2).
+
+Jika digit tidak terbaca:
+
+→ PERLU VERIFIKASI.
+
+JANGAN:
+
+- menebak angka;
+- memperbaiki angka;
+- menganggap typo;
+- menggunakan NIK header/caption.
 
 ============================================================
 KTP PERWAKILAN
 ============================================================
 
-KTP Perwakilan BOLEH:
-- ASLI; atau
-- FOTOKOPI.
+KTP Perwakilan WAJIB ASLI.
 
-KTP Perwakilan fotokopi tidak otomatis menyebabkan TIDAK LOLOS.
+Gunakan status:
 
-Nama dan NIK tetap harus dapat diverifikasi.
+- ASLI
+- FOTOKOPI
+- TIDAK ADA
+- TIDAK TERBACA
 
-============================================================
-FOTO PBP
-============================================================
+ASLI:
 
-Foto PBP WAJIB memperlihatkan:
-1. KTP PBP.
-2. KTP Perwakilan.
-3. KK.
-4. 3 beras/karung beras.
+→ SESUAI.
 
-KTP PBP harus terlihat sebagai KTP ASLI.
-KTP Perwakilan boleh ASLI atau FOTOKOPI.
+FOTOKOPI:
 
-Jika salah satu komponen wajib tidak terlihat:
+→ TIDAK SESUAI.
 → TIDAK LOLOS.
 
-Jika kualitas foto tidak memungkinkan pemeriksaan:
+TIDAK ADA:
+
+→ TIDAK LOLOS.
+
+TIDAK TERBACA:
+
+→ PERLU VERIFIKASI.
+
+JANGAN menebak keaslian KTP.
+
+============================================================
+PEMERIKSAAN KK
+============================================================
+
+PBP DAN PERWAKILAN WAJIB tercantum dalam KK YANG SAMA.
+
+Bandingkan secara langsung:
+
+KK PBP
+↔
+KK PERWAKILAN.
+
+Tampilkan nilai nomor KK apabila terbaca.
+
+Contoh:
+
+KK PBP        : 1701010000000001
+KK Perwakilan : 1701010000000001
+Detail        : NOMOR KK SAMA.
+
+→ SESUAI.
+
+Jika berbeda:
+
+KK PBP        : 1701010000000001
+KK Perwakilan : 1701010000000002
+Detail        : NOMOR KK BERBEDA.
+
+→ TIDAK SESUAI.
+→ TIDAK LOLOS.
+
+JANGAN menyimpulkan satu KK hanya berdasarkan:
+
+- nama keluarga;
+- alamat;
+- kemiripan nama;
+- asumsi hubungan keluarga.
+
+Nomor KK harus menjadi dasar utama.
+
+Jika nomor KK tidak terbaca:
+
 → PERLU VERIFIKASI.
 
 ============================================================
-KLASIFIKASI HASIL
+PEMERIKSAAN ANGGOTA KK
+============================================================
+
+Verifikasi bahwa:
+
+1. Nama PBP tercantum dalam KK.
+2. NIK PBP tercantum apabila tersedia.
+3. Nama Perwakilan tercantum dalam KK.
+4. NIK Perwakilan tercantum apabila tersedia.
+5. Keduanya berada dalam nomor KK yang sama.
+
+Jika salah satu tidak dapat dibuktikan:
+
+→ PERLU VERIFIKASI.
+
+Jika terbukti salah satu bukan anggota KK tersebut:
+
+→ TIDAK LOLOS.
+
+============================================================
+PEMERIKSAAN SILANG
+============================================================
+
+Lakukan pemeriksaan silang:
+
+DATA PBP
+↕
+KK
+↕
+DATA PERWAKILAN
+↕
+KTP PERWAKILAN.
+
+Jangan hanya memeriksa apakah nama terlihat sama.
+
+Periksa nilai aktual dan detail perbandingannya.
+
+============================================================
+HASIL
 ============================================================
 
 Gunakan hanya:
+
 - LOLOS
 - TIDAK LOLOS
 - PERLU VERIFIKASI
 
-LOLOS hanya jika seluruh persyaratan wajib terpenuhi.
+LOLOS hanya jika seluruh syarat wajib terbukti.
+
+TIDAK LOLOS jika terdapat syarat wajib yang terbukti tidak terpenuhi.
+
+PERLU VERIFIKASI jika bukti tersedia tetapi tidak cukup jelas.
 
 ============================================================
 OUTPUT WAJIB
 ============================================================
 
-| No | No PBP | Nama PBP | NIK PBP | Nama Perwakilan | NIK Perwakilan | KK PBP | KK Perwakilan | KTP PBP | KTP Perwakilan | KK | 2 KTP di Foto PBP | 3 Beras Jelas | Kesamaan KK | HASIL | ALASAN |
-|----|---------|----------|---------|-----------------|----------------|---------|---------------|---------|-----------------|----|--------------------|----------------|-------------|-------|--------|
+WAJIB membuat tabel DETAIL satu baris untuk setiap PBP.
 
-Gunakan nilai SESUAI, TIDAK SESUAI, TIDAK ADA, TIDAK TERBACA, JELAS, TIDAK JELAS, atau TIDAK DAPAT DIVERIFIKASI sesuai kondisi.
+JANGAN hanya menulis "SESUAI".
+
+Tampilkan nilai sumber dan hasil perbandingannya.
+
+Format:
+
+| No | No PBP | Nama PBP | NIK PBP | Nama Perwakilan | Nama KTP Perwakilan | Detail Nama | NIK Perwakilan | NIK KTP Perwakilan | Detail NIK | KK PBP | KK Perwakilan | Detail KK | PBP dalam KK | Perwakilan dalam KK | KTP Perwakilan | HASIL | ALASAN |
+|----|---------|----------|---------|-----------------|----------------------|-------------|----------------|---------------------|------------|---------|---------------|------------|---------------|----------------------|-----------------|-------|--------|
+
+Detail Nama:
+- SAMA
+- BERBEDA — jelaskan perbedaannya
+- TIDAK DAPAT DIVERIFIKASI
+
+Detail NIK:
+- 16/16 DIGIT SAMA
+- BERBEDA — sebutkan digit yang berbeda
+- TIDAK DAPAT DIVERIFIKASI
+
+Detail KK:
+- NOMOR KK SAMA
+- NOMOR KK BERBEDA
+- NOMOR KK TIDAK DAPAT DIVERIFIKASI
+
+PBP dalam KK:
+- ADA
+- TIDAK ADA
+- TIDAK DAPAT DIVERIFIKASI
+
+Perwakilan dalam KK:
+- ADA
+- TIDAK ADA
+- TIDAK DAPAT DIVERIFIKASI
+
+KTP Perwakilan:
+- ASLI
+- FOTOKOPI
+- TIDAK ADA
+- TIDAK TERBACA
+
+============================================================
+CONTOH OUTPUT
+============================================================
+
+Contoh LOLOS:
+
+Nama Perwakilan:
+MUHAMMAD HADI
+
+Nama KTP:
+MUHAMMAD HADI
+
+Detail:
+SAMA
+
+NIK Perwakilan:
+1301055508540001
+
+NIK KTP:
+1301055508540001
+
+Detail NIK:
+16/16 DIGIT SAMA
+
+KK PBP:
+1701010000000001
+
+KK Perwakilan:
+1701010000000001
+
+Detail KK:
+NOMOR KK SAMA
+
+PBP dalam KK:
+ADA
+
+Perwakilan dalam KK:
+ADA
+
+KTP Perwakilan:
+ASLI
+
+HASIL:
+LOLOS.
+
+Contoh TIDAK LOLOS:
+
+KK PBP:
+1701010000000001
+
+KK Perwakilan:
+1701010000000002
+
+Detail:
+NOMOR KK BERBEDA.
+
+Kategori PERWAKILAN 1 KK mensyaratkan PBP dan Perwakilan berada dalam KK yang sama.
+
+HASIL:
+TIDAK LOLOS.
 
 ============================================================
 REKAPITULASI
 ============================================================
 
-Total PBP:
-- LOLOS:
-- TIDAK LOLOS:
-- PERLU VERIFIKASI:
+| HASIL | JUMLAH | PERSENTASE |
+|-------|-------:|------------:|
+| LOLOS | ... | ...% |
+| TIDAK LOLOS | ... | ...% |
+| PERLU VERIFIKASI | ... | ...% |
+| TOTAL | ... | 100% |
 
-Persentase:
-- LOLOS:
-- TIDAK LOLOS:
-- PERLU VERIFIKASI:
+Pastikan:
+
+LOLOS + TIDAK LOLOS + PERLU VERIFIKASI = TOTAL PBP.
 
 ============================================================
-ATURAN TERAKHIR
+KESIMPULAN
+============================================================
+
+"Jumlah PBP yang memenuhi seluruh persyaratan kategori PERWAKILAN 1 KK adalah ... PBP."
+
+Jika terdapat PBP TIDAK LOLOS atau PERLU VERIFIKASI, berikan ringkasan penyebabnya.
+
+============================================================
+PEMERIKSAAN ULANG
+============================================================
+
+Setelah seluruh PBP diperiksa, lakukan CHECK ULANG khusus terhadap:
+
+1. Nama Perwakilan berbeda.
+2. NIK Perwakilan berbeda satu digit.
+3. NIK Perwakilan berbeda lebih dari satu digit.
+4. Digit NIK tidak terbaca.
+5. KTP Perwakilan fotokopi.
+6. KTP Perwakilan tidak ada.
+7. KTP Perwakilan tidak terbaca.
+8. PBP tidak ditemukan dalam KK.
+9. Perwakilan tidak ditemukan dalam KK.
+10. Nomor KK berbeda.
+11. Nomor KK tidak terbaca.
+
+JANGAN memberikan LOLOS sebelum seluruh pemeriksaan ulang selesai.
+
+============================================================
+ATURAN MUTLAK
 ============================================================
 
 JANGAN MENGADA-ADA DATA.
-JANGAN MENEBak NAMA, NIK, ATAU NOMOR KK.
+
+JANGAN MENEBak NAMA.
+
+JANGAN MENEBak NIK.
+
+JANGAN MENEBak NOMOR KK.
+
 JANGAN MENEBak keaslian KTP.
 
-Lakukan pemeriksaan silang DATA PDF ↔ KTP PBP ↔ KTP PERWAKILAN ↔ KK ↔ FOTO PBP.
-LOLOS hanya jika seluruh persyaratan wajib dapat dibuktikan.""",
+NIK WAJIB 16/16 DIGIT SAMA.
 
+SATU DIGIT BERBEDA = TIDAK LOLOS.
+
+KTP PERWAKILAN WAJIB ASLI.
+
+KTP PBP TIDAK WAJIB.
+
+PBP DAN PERWAKILAN WAJIB BERADA DALAM KK YANG SAMA.
+
+JANGAN menggunakan Foto PBP sebagai dasar verifikasi kategori ini.
+
+JANGAN mencari Foto PBP di dalam PDF.
+
+FOKUS UTAMA:
+
+DATA PBP
+↔
+DATA PERWAKILAN
+↔
+KTP PERWAKILAN
+↔
+KK.
+
+HASIL AKHIR HARUS BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF.""",
+
+
+    # ======================================================
+    # PERWAKILAN BEDA KK
+    # ======================================================
     "Perwakilan Beda KK": """ANDA BERTUGAS SEBAGAI VERIFIKATOR DATA BANTUAN PANGAN (BANPANG).
 
-Lakukan verifikasi secara objektif terhadap seluruh data dan dokumentasi yang terdapat dalam PDF yang saya upload.
+Lakukan verifikasi secara OBJEKTIF, DETAIL, INDIVIDUAL, DAN BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF YANG SAYA UPLOAD.
 
 KHUSUS UNTUK:
-STATUS PBP = "PERWAKILAN" / "PERWAKILAN BEDA KK"
 
-TUJUAN VERIFIKASI:
-Memastikan identitas PBP dan Perwakilan sesuai serta memastikan PBP dan Perwakilan berada dalam KECAMATAN YANG SAMA. Pada kategori ini, PBP dan Perwakilan TIDAK harus berada dalam KK yang sama.
-
-SYARAT LOLOS:
-1. Nama dan NIK PBP pada PDF harus sesuai dengan KTP PBP.
-2. Nama dan NIK Perwakilan pada PDF harus sesuai dengan KTP Perwakilan.
-3. KK PBP dan KK Perwakilan BOLEH BERBEDA.
-4. PBP dan Perwakilan WAJIB berada dalam kecamatan yang sama.
-5. KTP PBP WAJIB ASLI.
-6. KTP Perwakilan boleh ASLI atau FOTOKOPI.
-7. Foto PBP WAJIB memperlihatkan PBP, KTP PBP, KTP Perwakilan, dan 3 beras/karung beras dengan jelas.
+STATUS PBP = "PERWAKILAN BEDA KK"
 
 ============================================================
-KESESUAIAN DATA PBP
+SUMBER BUKTI
 ============================================================
 
-Bandingkan Nama dan NIK PBP pada PDF dengan KTP PBP.
+Gunakan:
 
-Jika NIK berbeda atau nama berbeda secara material:
+1. Data PBP pada PDF.
+2. Data Perwakilan pada PDF.
+3. KTP Perwakilan pada PDF.
+4. Data Kecamatan PBP.
+5. Data Kecamatan Perwakilan.
+6. KK/dokumen identitas yang tersedia pada PDF sebagai bukti pendukung.
+
+PENTING:
+
+PDF merupakan sumber utama verifikasi.
+
+Foto PBP / foto dokumentasi penyerahan TIDAK menjadi bagian dari pemeriksaan ini.
+
+JANGAN mencari Foto PBP di dalam PDF.
+
+JANGAN menilai:
+
+- PBP pada foto penyerahan;
+- Perwakilan pada foto penyerahan;
+- KTP pada foto penyerahan;
+- jumlah karung/beras;
+- dokumentasi penyerahan;
+- originalitas Foto PBP.
+
+Fokus verifikasi adalah:
+
+DATA PBP
+↔
+DATA PERWAKILAN
+↔
+KTP PERWAKILAN
+↔
+KECAMATAN.
+
+============================================================
+TUJUAN VERIFIKASI
+============================================================
+
+Memastikan:
+
+1. Nama Perwakilan sesuai dengan KTP Perwakilan.
+2. NIK Perwakilan sesuai dengan KTP Perwakilan.
+3. NIK Perwakilan cocok 16/16 digit.
+4. KTP Perwakilan tersedia dan ASLI.
+5. Kecamatan PBP dapat diverifikasi.
+6. Kecamatan Perwakilan dapat diverifikasi.
+7. Kecamatan PBP dan Kecamatan Perwakilan SAMA.
+8. PBP dan Perwakilan BOLEH berasal dari KK yang berbeda.
+
+============================================================
+SYARAT WAJIB LOLOS
+============================================================
+
+1. Nama Perwakilan sesuai dengan KTP Perwakilan.
+2. NIK Perwakilan sesuai dengan KTP Perwakilan.
+3. NIK Perwakilan cocok 16/16 digit.
+4. KTP Perwakilan tersedia.
+5. KTP Perwakilan teridentifikasi ASLI.
+6. Kecamatan PBP dapat diverifikasi.
+7. Kecamatan Perwakilan dapat diverifikasi.
+8. Kecamatan PBP = Kecamatan Perwakilan.
+
+KK PBP DAN KK PERWAKILAN TIDAK WAJIB SAMA.
+
+KK berbeda:
+
+→ DIPERBOLEHKAN.
+
+============================================================
+KTP PBP TIDAK WAJIB
+============================================================
+
+KTP PBP TIDAK WAJIB tersedia.
+
+Jika KTP PBP tidak tersedia:
+
+→ BUKAN alasan TIDAK LOLOS.
+
+Jika KTP PBP tersedia:
+
+→ dapat digunakan sebagai bukti tambahan.
+
+KTP PBP dapat berstatus:
+
+- ASLI
+- FOTOKOPI
+- TIDAK ADA
+- TIDAK TERBACA
+
+KTP PBP tidak menjadi syarat kelulusan utama kategori BEDA KK.
+
+============================================================
+PEMERIKSAAN NAMA PERWAKILAN
+============================================================
+
+Bandingkan:
+
+NAMA PERWAKILAN PADA DATA
+↔
+NAMA PADA KTP PERWAKILAN.
+
+Tampilkan kedua nama secara lengkap.
+
+Jika sama:
+
+→ SESUAI.
+
+Jika berbeda secara material:
+
+→ TIDAK SESUAI.
 → TIDAK LOLOS.
 
+Jelaskan secara spesifik perbedaannya.
+
 Jika tidak terbaca:
+
 → PERLU VERIFIKASI.
 
+JANGAN menebak nama.
+
 ============================================================
-KESESUAIAN DATA PERWAKILAN
+PEMERIKSAAN NIK PERWAKILAN
 ============================================================
 
-Bandingkan Nama dan NIK Perwakilan pada PDF dengan KTP Perwakilan.
+Bandingkan:
 
-Jika NIK berbeda atau nama berbeda secara material:
+NIK PERWAKILAN PADA DATA
+↔
+NIK PADA KTP PERWAKILAN.
+
+WAJIB membandingkan 16 DIGIT satu per satu.
+
+Jika 16/16 digit sama:
+
+→ SESUAI.
+
+Jika satu digit saja berbeda:
+
+→ TIDAK SESUAI.
 → TIDAK LOLOS.
 
-Jika tidak terbaca:
+Sebutkan posisi semua digit yang berbeda.
+
+Contoh:
+
+NIK Perwakilan : 1301055508540001
+NIK KTP        : 1301055508540002
+Detail         : Digit ke-16 berbeda (1 ≠ 2).
+
+Jika digit tidak terbaca:
+
 → PERLU VERIFIKASI.
+
+JANGAN:
+
+- menebak angka;
+- memperbaiki angka;
+- menganggap typo;
+- menggunakan NIK header/caption sebagai pengganti NIK KTP.
+
+============================================================
+KTP PERWAKILAN
+============================================================
+
+KTP Perwakilan WAJIB ASLI.
+
+Gunakan:
+
+- ASLI
+- FOTOKOPI
+- TIDAK ADA
+- TIDAK TERBACA
+
+ASLI:
+
+→ SESUAI.
+
+FOTOKOPI:
+
+→ TIDAK SESUAI.
+→ TIDAK LOLOS.
+
+TIDAK ADA:
+
+→ TIDAK LOLOS.
+
+TIDAK TERBACA:
+
+→ PERLU VERIFIKASI.
+
+JANGAN menebak keaslian KTP.
 
 ============================================================
 KK BOLEH BERBEDA
 ============================================================
 
-JANGAN menyatakan TIDAK LOLOS hanya karena nomor KK PBP dan KK Perwakilan berbeda.
+PENTING:
 
-Untuk kategori ini:
-KK PBP ≠ KK Perwakilan
+PBP DAN PERWAKILAN TIDAK HARUS BERADA DALAM KK YANG SAMA.
+
+KK PBP ≠ KK PERWAKILAN:
+
 → DIPERBOLEHKAN.
 
-Yang WAJIB adalah kecamatan PBP dan kecamatan Perwakilan sama.
+JANGAN menyatakan TIDAK LOLOS hanya karena nomor KK berbeda.
+
+Jika nomor KK tersedia, tampilkan kedua nomor KK untuk dokumentasi.
+
+Contoh:
+
+KK PBP:
+1701010000000001
+
+KK Perwakilan:
+1701010000000002
+
+Detail:
+NOMOR KK BERBEDA — DIPERBOLEHKAN UNTUK KATEGORI BEDA KK.
 
 ============================================================
-KESESUAIAN KECAMATAN
+PEMERIKSAAN KECAMATAN
 ============================================================
 
-Verifikasi kecamatan PBP dan kecamatan Perwakilan berdasarkan data/dokumen yang tersedia.
+KECAMATAN adalah syarat WAJIB.
 
-Pastikan:
+Bandingkan secara langsung:
+
+KECAMATAN PBP
+↔
+KECAMATAN PERWAKILAN.
+
+Tampilkan kedua nilai kecamatan.
+
+Contoh:
+
+Kecamatan PBP:
+VII KOTO
+
+Kecamatan Perwakilan:
+VII KOTO
+
+Detail:
+KECAMATAN SAMA.
+
+→ SESUAI.
+
+Jika berbeda:
+
+Kecamatan PBP:
+VII KOTO
+
+Kecamatan Perwakilan:
+PATAMUAN
+
+Detail:
+KECAMATAN BERBEDA.
+
+→ TIDAK SESUAI.
+→ TIDAK LOLOS.
+
+Jika kecamatan tidak dapat dipastikan:
+
+→ PERLU VERIFIKASI.
+
+============================================================
+ATURAN KECAMATAN
+============================================================
+
+Kecamatan PBP dan Kecamatan Perwakilan WAJIB sama.
+
+Perbedaan Desa/Kelurahan:
+
+→ DIPERBOLEHKAN selama Kecamatan sama.
+
+Perbedaan alamat:
+
+→ tidak otomatis berarti Kecamatan berbeda.
+
+Kabupaten sama:
+
+→ TIDAK CUKUP untuk menyatakan Kecamatan sama.
+
+Provinsi sama:
+
+→ TIDAK CUKUP untuk menyatakan Kecamatan sama.
+
+JANGAN menyimpulkan Kecamatan berdasarkan perkiraan.
+
+Gunakan data Kecamatan yang benar-benar terlihat atau tercantum dalam dokumen.
+
+============================================================
+PEMERIKSAAN SILANG
+============================================================
+
+Lakukan pemeriksaan silang:
+
+DATA PBP
+↕
+DATA PERWAKILAN
+↕
+KTP PERWAKILAN
+↕
+KECAMATAN.
+
+KK dapat digunakan sebagai informasi tambahan.
+
+Perbedaan KK TIDAK menjadi alasan TIDAK LOLOS dalam kategori BEDA KK.
+
+Yang menjadi syarat adalah:
+
 KECAMATAN PBP = KECAMATAN PERWAKILAN.
 
-Perbedaan desa/kelurahan masih diperbolehkan selama keduanya berada dalam kecamatan yang sama.
-
-Jika kecamatan berbeda:
-→ TIDAK LOLOS.
-
-Jika kecamatan tidak dapat diverifikasi:
-→ PERLU VERIFIKASI.
-
-Jangan menebak kecamatan berdasarkan nama atau perkiraan lokasi.
-
 ============================================================
-KTP PBP WAJIB ASLI
+HASIL
 ============================================================
 
-KTP PBP harus ASLI.
+Gunakan hanya:
 
-Jika KTP PBP terlihat FOTOKOPI:
-→ TIDAK LOLOS.
+- LOLOS
+- TIDAK LOLOS
+- PERLU VERIFIKASI
 
-Jika keaslian KTP PBP tidak dapat dipastikan:
-→ PERLU VERIFIKASI.
+LOLOS:
 
-============================================================
-KTP PERWAKILAN
-============================================================
+Jika seluruh syarat wajib terbukti.
 
-KTP Perwakilan boleh ASLI atau FOTOKOPI.
+TIDAK LOLOS:
 
-Fotokopi KTP Perwakilan tidak otomatis menyebabkan TIDAK LOLOS.
-Nama dan NIK tetap harus dapat diverifikasi.
+Jika terdapat syarat wajib yang terbukti tidak terpenuhi.
 
-============================================================
-FOTO PBP
-============================================================
+PERLU VERIFIKASI:
 
-Foto PBP WAJIB memperlihatkan:
-1. PBP/orang yang menerima bantuan.
-2. KTP PBP.
-3. KTP Perwakilan.
-4. 3 beras/karung beras.
-
-Jika salah satu komponen tidak terlihat:
-→ TIDAK LOLOS.
-
-Jika foto terlalu buram atau tidak cukup jelas untuk memastikan komponen:
-→ PERLU VERIFIKASI.
-
-============================================================
-KLASIFIKASI HASIL
-============================================================
-
-LOLOS hanya jika seluruh persyaratan wajib terpenuhi.
-
-TIDAK LOLOS jika terdapat persyaratan wajib yang tidak terpenuhi.
-
-PERLU VERIFIKASI jika bukti tersedia tetapi tidak cukup jelas untuk memastikan kebenarannya.
+Jika bukti tidak cukup jelas untuk menentukan.
 
 ============================================================
 OUTPUT WAJIB
 ============================================================
 
-| No | No PBP | Nama PBP | NIK PBP | Nama Perwakilan | NIK Perwakilan | Kecamatan PBP | Kecamatan Perwakilan | KTP PBP | KTP Perwakilan | 2 KTP + PBP | 3 Beras | HASIL | ALASAN |
-|----|---------|----------|---------|-----------------|----------------|---------------|----------------------|---------|-----------------|--------------|---------|-------|--------|
+WAJIB membuat tabel DETAIL satu baris untuk setiap PBP.
 
-Gunakan nilai:
-- KTP PBP: ASLI / FOTOKOPI / TIDAK ADA / TIDAK TERBACA
-- KTP Perwakilan: ASLI / FOTOKOPI / TIDAK ADA / TIDAK TERBACA
-- Kecamatan: SAMA / BERBEDA / TIDAK TERBACA
-- 2 KTP + PBP: LENGKAP / TIDAK LENGKAP / TIDAK JELAS
-- 3 Beras: JELAS / TIDAK JELAS / TIDAK TERLIHAT
-- HASIL: LOLOS / TIDAK LOLOS / PERLU VERIFIKASI
+JANGAN hanya menulis "SESUAI" atau "TIDAK SESUAI".
 
-ALASAN harus singkat, spesifik, dan berdasarkan bukti.
+Tampilkan nilai aktual yang dibandingkan dan detail perbedaannya.
+
+Format:
+
+| No | No PBP | Nama PBP | NIK PBP | Kecamatan PBP | Nama Perwakilan | Nama KTP Perwakilan | Detail Nama | NIK Perwakilan | NIK KTP Perwakilan | Detail NIK | KK PBP | KK Perwakilan | Detail KK | Kecamatan Perwakilan | Detail Kecamatan | KTP Perwakilan | HASIL | ALASAN |
+|----|---------|----------|---------|---------------|-----------------|----------------------|-------------|----------------|---------------------|------------|---------|---------------|------------|----------------------|------------------|-----------------|-------|--------|
+
+Detail Nama:
+- SAMA
+- BERBEDA — jelaskan perbedaannya
+- TIDAK DAPAT DIVERIFIKASI
+
+Detail NIK:
+- 16/16 DIGIT SAMA
+- BERBEDA — sebutkan posisi digit yang berbeda
+- TIDAK DAPAT DIVERIFIKASI
+
+Detail KK:
+- SAMA
+- BERBEDA — DIPERBOLEHKAN
+- TIDAK DAPAT DIVERIFIKASI
+
+Detail Kecamatan:
+- SAMA
+- BERBEDA
+- TIDAK DAPAT DIVERIFIKASI
+
+KTP Perwakilan:
+- ASLI
+- FOTOKOPI
+- TIDAK ADA
+- TIDAK TERBACA
+
+============================================================
+CONTOH OUTPUT
+============================================================
+
+Contoh LOLOS:
+
+Nama Perwakilan:
+MUHAMMAD HADI
+
+Nama KTP:
+MUHAMMAD HADI
+
+Detail Nama:
+SAMA
+
+NIK Perwakilan:
+1301055508540001
+
+NIK KTP:
+1301055508540001
+
+Detail NIK:
+16/16 DIGIT SAMA
+
+KK PBP:
+1701010000000001
+
+KK Perwakilan:
+1701010000000002
+
+Detail KK:
+BERBEDA — DIPERBOLEHKAN UNTUK KATEGORI BEDA KK.
+
+Kecamatan PBP:
+VII KOTO
+
+Kecamatan Perwakilan:
+VII KOTO
+
+Detail Kecamatan:
+SAMA
+
+KTP Perwakilan:
+ASLI
+
+HASIL:
+LOLOS.
+
+Contoh TIDAK LOLOS:
+
+Kecamatan PBP:
+VII KOTO
+
+Kecamatan Perwakilan:
+PATAMUAN
+
+Detail Kecamatan:
+BERBEDA.
+
+Karena Kecamatan PBP dan Kecamatan Perwakilan wajib sama, maka PBP TIDAK LOLOS.
+
+Contoh PERLU VERIFIKASI:
+
+Kecamatan PBP:
+VII KOTO
+
+Kecamatan Perwakilan:
+VII KOT?
+
+Detail Kecamatan:
+Tidak dapat dipastikan karena data Kecamatan Perwakilan tidak terbaca.
+
+HASIL:
+PERLU VERIFIKASI.
 
 ============================================================
 REKAPITULASI
 ============================================================
 
-Total PBP:
-- LOLOS:
-- TIDAK LOLOS:
-- PERLU VERIFIKASI:
+| HASIL | JUMLAH | PERSENTASE |
+|-------|-------:|------------:|
+| LOLOS | ... | ...% |
+| TIDAK LOLOS | ... | ...% |
+| PERLU VERIFIKASI | ... | ...% |
+| TOTAL | ... | 100% |
 
-Persentase:
-- LOLOS:
-- TIDAK LOLOS:
-- PERLU VERIFIKASI:
+Pastikan:
 
-KESIMPULAN:
-Jumlah PBP yang memenuhi seluruh persyaratan kategori PERWAKILAN BEDA KK adalah ... PBP.
+LOLOS + TIDAK LOLOS + PERLU VERIFIKASI = TOTAL PBP.
 
 ============================================================
-ATURAN TERAKHIR
+KESIMPULAN
+============================================================
+
+"Jumlah PBP yang memenuhi seluruh persyaratan kategori PERWAKILAN BEDA KK adalah ... PBP."
+
+Jika terdapat PBP TIDAK LOLOS atau PERLU VERIFIKASI, berikan ringkasan penyebabnya.
+
+============================================================
+PEMERIKSAAN ULANG
+============================================================
+
+Setelah seluruh PBP diperiksa, lakukan CHECK ULANG khusus terhadap:
+
+1. Nama Perwakilan berbeda.
+2. NIK Perwakilan berbeda satu digit.
+3. NIK Perwakilan berbeda lebih dari satu digit.
+4. Digit NIK tidak terbaca.
+5. KTP Perwakilan fotokopi.
+6. KTP Perwakilan tidak ada.
+7. KTP Perwakilan tidak terbaca.
+8. Kecamatan PBP berbeda dengan Kecamatan Perwakilan.
+9. Kecamatan tidak dapat dipastikan.
+10. Data Kecamatan hanya berdasarkan perkiraan.
+11. Nomor KK berbeda — pastikan tidak salah dianggap sebagai alasan TIDAK LOLOS.
+
+JANGAN memberikan LOLOS sebelum seluruh pemeriksaan ulang selesai.
+
+============================================================
+ATURAN MUTLAK
 ============================================================
 
 JANGAN MENGADA-ADA DATA.
-JANGAN MENEBak NAMA, NIK, KK, ATAU KECAMATAN.
+
+JANGAN MENEBak NAMA.
+
+JANGAN MENEBak NIK.
+
+JANGAN MENEBak NOMOR KK.
+
+JANGAN MENEBak KECAMATAN.
+
 JANGAN MENEBak keaslian KTP.
 
-KK PBP DAN KK PERWAKILAN BOLEH BERBEDA.
-PBP DAN PERWAKILAN WAJIB BERADA DALAM KECAMATAN YANG SAMA.
-KTP PBP WAJIB ASLI.
-KTP PERWAKILAN BOLEH FOTOKOPI.
+NIK WAJIB 16/16 DIGIT SAMA.
 
-Lakukan pemeriksaan silang DATA PDF ↔ KTP PBP ↔ KTP PERWAKILAN ↔ DOKUMEN KK/DATA WILAYAH ↔ FOTO PBP.
-HASIL AKHIR HARUS BERDASARKAN BUKTI YANG TERLIHAT PADA PDF.""",
+SATU DIGIT BERBEDA = TIDAK LOLOS.
 
-    "Pengganti": """ANDA BERTUGAS SEBAGAI VERIFIKATOR DATA BANTUAN PANGAN (BANPANG).
+KTP PERWAKILAN WAJIB ASLI.
 
-Lakukan verifikasi secara objektif terhadap PDF yang saya upload.
-PDF berisi data PBP, data Pengganti, dan dokumentasi foto.
+KTP PBP TIDAK WAJIB.
 
-KHUSUS STATUS PBP = PENGGANTI.
+PBP DAN PERWAKILAN BOLEH BERADA DALAM KK YANG BERBEDA.
 
-TUJUAN:
-Memastikan identitas PBP dan Pengganti sesuai dengan data PDF serta dokumentasi penyerahan memenuhi persyaratan.
+KK BERBEDA BUKAN ALASAN TIDAK LOLOS.
 
-SYARAT LOLOS:
-1. Nama PBP pada PDF sesuai dengan KTP PBP.
-2. NIK PBP pada PDF sesuai dengan KTP PBP.
-3. Nama Pengganti pada PDF sesuai dengan KTP Pengganti.
-4. NIK Pengganti pada PDF sesuai dengan KTP Pengganti.
-5. Foto KTP PBP dan KTP Pengganti tersedia dan dapat dibaca.
-6. Dokumen pendukung/KK yang dipersyaratkan tersedia dan dapat diperiksa.
-7. Foto PBP/dokumentasi memperlihatkan dokumen identitas yang dipersyaratkan dan 3 foto/karung beras dengan jelas.
+KECAMATAN PBP DAN KECAMATAN PERWAKILAN WAJIB SAMA.
 
-Jangan menebak data yang tidak terlihat atau tidak terbaca.
+JANGAN menganggap Kabupaten yang sama berarti Kecamatan yang sama.
 
-HASIL:
-LOLOS = semua persyaratan wajib terpenuhi.
-TIDAK LOLOS = terdapat persyaratan wajib yang tidak terpenuhi.
-PERLU VERIFIKASI = bukti tersedia tetapi kualitas gambar belum cukup untuk memastikan benar atau salah.
+JANGAN menggunakan Foto PBP sebagai dasar verifikasi kategori ini.
 
-OUTPUT DALAM TABEL:
-| No | No PBP | Nama PBP | NIK PBP | Nama Pengganti | NIK Pengganti | KTP PBP | KTP Pengganti | Dokumen Pendukung | 3 Beras | HASIL | ALASAN |
-|----|---------|----------|---------|----------------|---------------|---------|---------------|-------------------|---------|-------|--------|
+JANGAN mencari Foto PBP di dalam PDF.
 
-Jangan hanya membaca data teks PDF. Periksa juga dokumentasi visual.
-Jangan mengada-ada data dan jelaskan bukti yang menyebabkan keputusan.""",
+FOKUS UTAMA:
+
+DATA PBP
+↔
+DATA PERWAKILAN
+↔
+KTP PERWAKILAN
+↔
+KECAMATAN.
+
+HASIL AKHIR HARUS BERDASARKAN BUKTI YANG BENAR-BENAR TERLIHAT PADA PDF."""
 }
-
-
 
 class VerifikasiBanpangPage(ctk.CTkFrame):
 
@@ -603,6 +1534,15 @@ class VerifikasiBanpangPage(ctk.CTkFrame):
             "Verifikasi Banpang"
         )
         os.makedirs(self.output_folder, exist_ok=True)
+        self.pbp_photo_folder = os.path.join(
+            self.output_folder,
+            "Foto_PBP"
+        )
+
+        os.makedirs(
+            self.pbp_photo_folder,
+            exist_ok=True
+        )
         self.output_pdf_path = os.path.join(
             self.output_folder,
             "Hasil_Banpang.pdf"
@@ -965,124 +1905,382 @@ class VerifikasiBanpangPage(ctk.CTkFrame):
         tips_text.pack(anchor="w", padx=14, pady=(0, 12))
 
     # ==========================================================
-    # CARD 3 - DATA & PDF
+    # CARD 3 - DATA & OUTPUT
     # ==========================================================
     def create_collection_card(self, parent):
         card = self.create_card(parent)
-        card.pack(fill="x", padx=15, pady=(0, 12))
+        card.pack(
+            fill="x",
+            padx=15,
+            pady=(0, 12)
+        )
 
-        header = ctk.CTkFrame(card, fg_color="transparent")
-        header.pack(fill="x", padx=22, pady=(16, 8))
+        # ======================================================
+        # HEADER
+        # ======================================================
+
+        header = ctk.CTkFrame(
+            card,
+            fg_color="transparent"
+        )
+        header.pack(
+            fill="x",
+            padx=22,
+            pady=(16, 6)
+        )
 
         title = ctk.CTkLabel(
             header,
-            text="③  Pengambilan Data & Pembuatan PDF",
-            font=ctk.CTkFont(size=16, weight="bold"),
+            text="③  Pengambilan Data & Pembuatan Output",
+            font=ctk.CTkFont(
+                size=16,
+                weight="bold"
+            ),
             text_color=Colors.TEXT_PRIMARY
         )
         title.pack(side="left")
 
-        badge = self.create_badge(header, "OTOMATIS")
-        badge.pack(side="left", padx=(12, 0))
+        badge = self.create_badge(
+            header,
+            "OTOMATIS"
+        )
+        badge.pack(
+            side="left",
+            padx=(12, 0)
+        )
 
         self.collection_status = ctk.CTkLabel(
             header,
             text="● Menunggu data website siap",
-            font=ctk.CTkFont(size=11, weight="bold"),
+            font=ctk.CTkFont(
+                size=11,
+                weight="bold"
+            ),
             text_color=Colors.TEXT_MUTED
         )
-        self.collection_status.pack(side="right")
+        self.collection_status.pack(
+            side="right"
+        )
+
+        # ======================================================
+        # DESCRIPTION
+        # ======================================================
 
         description = ctk.CTkLabel(
             card,
-            text="Aplikasi akan membaca data PBP, mengambil foto KTP dan foto PBP, lalu menyusun 1 file PDF searchable / OCR.",
+            text=(
+                "Aplikasi membaca data PBP dan mengambil Foto KTP "
+                "serta Foto PBP. PDF hanya berisi data dan Foto KTP, "
+                "sedangkan Foto PBP disimpan terpisah ke folder yang dipilih."
+            ),
             font=Fonts.PAGE_SUBTITLE,
             text_color=Colors.TEXT_SECONDARY,
-            anchor="w"
+            anchor="w",
+            justify="left",
+            wraplength=1050
         )
-        description.pack(fill="x", padx=22, pady=(0, 10))
+        description.pack(
+            fill="x",
+            padx=22,
+            pady=(0, 10)
+        )
 
-        body = ctk.CTkFrame(card, fg_color="transparent")
-        body.pack(fill="x", padx=22, pady=(0, 12))
-        body.grid_columnconfigure(0, weight=1)
-        body.grid_columnconfigure(1, weight=0)
+        # ======================================================
+        # KPI STATISTICS
+        # ======================================================
 
         stats = ctk.CTkFrame(
-            body,
+            card,
             fg_color="#F8FAFC",
             corner_radius=14,
             border_width=1,
             border_color=Colors.BORDER
         )
-        stats.grid(row=0, column=0, sticky="nsew", padx=(0, 14))
+        stats.pack(
+            fill="x",
+            padx=22,
+            pady=(0, 12)
+        )
 
         stat_items = [
-            ("TOTAL PBP", "0", Colors.PRIMARY),
-            ("DATA TERBACA", "0 / 0", "#16A34A"),
-            ("FOTO KTP", "0 / 0", Colors.PRIMARY),
-            ("FOTO PBP", "0 / 0", "#7C3AED"),
-            ("PDF DIBUAT", "0 / 0", "#DC2626")
+            (
+                "TOTAL PBP",
+                "0",
+                Colors.PRIMARY
+            ),
+            (
+                "DATA TERBACA",
+                "0 / 0",
+                "#16A34A"
+            ),
+            (
+                "FOTO KTP",
+                "0 / 0",
+                Colors.PRIMARY
+            ),
+            (
+                "FOTO PBP",
+                "0 / 0",
+                "#7C3AED"
+            ),
+            (
+                "PDF DIBUAT",
+                "0 / 0",
+                "#DC2626"
+            )
         ]
 
-        for index, (label, value, value_color) in enumerate(stat_items):
-            stats.grid_columnconfigure(index, weight=1)
+        for index in range(len(stat_items)):
+            stats.grid_columnconfigure(
+                index,
+                weight=1
+            )
 
-            item = ctk.CTkFrame(stats, fg_color="transparent")
-            item.grid(row=0, column=index, sticky="nsew", padx=3, pady=12)
+        for index, (
+            label,
+            value,
+            value_color
+        ) in enumerate(stat_items):
+
+            item = ctk.CTkFrame(
+                stats,
+                fg_color="transparent"
+            )
+
+            item.grid(
+                row=0,
+                column=index,
+                sticky="nsew",
+                padx=3,
+                pady=10
+            )
 
             value_label = ctk.CTkLabel(
                 item,
                 text=value,
-                font=ctk.CTkFont(size=21, weight="bold"),
+                font=ctk.CTkFont(
+                    size=21,
+                    weight="bold"
+                ),
                 text_color=value_color
             )
-            value_label.pack(pady=(4, 1))
+
+            value_label.pack(
+                pady=(2, 1)
+            )
 
             label_widget = ctk.CTkLabel(
                 item,
                 text=label,
-                font=ctk.CTkFont(size=9, weight="bold"),
+                font=ctk.CTkFont(
+                    size=9,
+                    weight="bold"
+                ),
                 text_color=Colors.TEXT_SECONDARY
             )
+
             label_widget.pack()
 
+            # Simpan reference label untuk update realtime
             if label == "TOTAL PBP":
                 self.total_pbp_value = value_label
+
             elif label == "DATA TERBACA":
                 self.data_read_value = value_label
+
             elif label == "FOTO KTP":
                 self.ktp_value = value_label
+
             elif label == "FOTO PBP":
                 self.pbp_photo_value = value_label
+
             elif label == "PDF DIBUAT":
                 self.pdf_value = value_label
 
+        # ======================================================
+        # LOWER CONTENT
+        # ======================================================
+
+        lower = ctk.CTkFrame(
+            card,
+            fg_color="transparent"
+        )
+
+        lower.pack(
+            fill="x",
+            padx=22,
+            pady=(0, 10)
+        )
+
+        lower.grid_columnconfigure(
+            0,
+            weight=1
+        )
+
+        lower.grid_columnconfigure(
+            1,
+            weight=0
+        )
+
+        # ======================================================
+        # LEFT - PROGRESS PANEL
+        # ======================================================
+
+        progress_panel = ctk.CTkFrame(
+            lower,
+            fg_color="#FFFFFF",
+            corner_radius=14,
+            border_width=1,
+            border_color=Colors.BORDER
+        )
+
+        progress_panel.grid(
+            row=0,
+            column=0,
+            sticky="nsew",
+            padx=(0, 14)
+        )
+
+        progress_title = ctk.CTkLabel(
+            progress_panel,
+            text="Progress Pengambilan Data",
+            font=ctk.CTkFont(
+                size=12,
+                weight="bold"
+            ),
+            text_color=Colors.TEXT_PRIMARY
+        )
+
+        progress_title.pack(
+            anchor="w",
+            padx=16,
+            pady=(12, 6)
+        )
+
+        # Progress bar
+        self.collection_progress = ctk.CTkProgressBar(
+            progress_panel,
+            height=10,
+            corner_radius=5
+        )
+
+        self.collection_progress.pack(
+            fill="x",
+            padx=16,
+            pady=(2, 5)
+        )
+
+        self.collection_progress.set(0)
+
+        # Progress info
+        progress_info = ctk.CTkFrame(
+            progress_panel,
+            fg_color="transparent"
+        )
+
+        progress_info.pack(
+            fill="x",
+            padx=16,
+            pady=(0, 3)
+        )
+
+        self.collection_percentage = ctk.CTkLabel(
+            progress_info,
+            text="0%",
+            font=ctk.CTkFont(
+                size=12,
+                weight="bold"
+            ),
+            text_color=Colors.TEXT_PRIMARY
+        )
+
+        self.collection_percentage.pack(
+            side="left"
+        )
+
+        self.collection_page_info = ctk.CTkLabel(
+            progress_info,
+            text="Data: 0 / 0",
+            font=ctk.CTkFont(
+                size=10
+            ),
+            text_color=Colors.TEXT_SECONDARY
+        )
+
+        self.collection_page_info.pack(
+            side="right"
+        )
+
+        # Status information
+        self.data_info_label = ctk.CTkLabel(
+            progress_panel,
+            text="Belum ada data yang dibaca.",
+            font=Fonts.PAGE_SUBTITLE,
+            text_color=Colors.TEXT_SECONDARY,
+            anchor="w",
+            justify="left"
+        )
+
+        self.data_info_label.pack(
+            fill="x",
+            padx=16,
+            pady=(2, 12)
+        )
+
+        # ======================================================
+        # RIGHT - OUTPUT SETTINGS
+        # ======================================================
+
         output = ctk.CTkFrame(
-            body,
+            lower,
             width=390,
             corner_radius=14,
             fg_color="#FFFFFF",
             border_width=1,
             border_color=Colors.BORDER
         )
-        output.grid(row=0, column=1, sticky="nsew")
+
+        output.grid(
+            row=0,
+            column=1,
+            sticky="nsew"
+        )
+
         output.grid_propagate(False)
 
         output_title = ctk.CTkLabel(
             output,
             text="⚙  Pengaturan Output",
-            font=ctk.CTkFont(size=12, weight="bold"),
+            font=ctk.CTkFont(
+                size=12,
+                weight="bold"
+            ),
             text_color=Colors.TEXT_PRIMARY
         )
-        output_title.pack(anchor="w", padx=14, pady=(10, 7))
+
+        output_title.pack(
+            anchor="w",
+            padx=14,
+            pady=(10, 7)
+        )
+
+        # ======================================================
+        # NAMA FILE PDF
+        # ======================================================
 
         filename_label = ctk.CTkLabel(
             output,
             text="Nama File PDF",
-            font=ctk.CTkFont(size=10),
+            font=ctk.CTkFont(
+                size=10
+            ),
             text_color=Colors.TEXT_SECONDARY
         )
-        filename_label.pack(anchor="w", padx=14)
+
+        filename_label.pack(
+            anchor="w",
+            padx=14
+        )
 
         self.pdf_filename_entry = ctk.CTkEntry(
             output,
@@ -1090,29 +2288,74 @@ class VerifikasiBanpangPage(ctk.CTkFrame):
             corner_radius=8,
             placeholder_text="Hasil_Banpang.pdf"
         )
-        self.pdf_filename_entry.pack(fill="x", padx=14, pady=(3, 7))
-        self.pdf_filename_entry.insert(0, "Hasil_Banpang.pdf")
+
+        self.pdf_filename_entry.pack(
+            fill="x",
+            padx=14,
+            pady=(3, 7)
+        )
+
+        self.pdf_filename_entry.insert(
+            0,
+            "Hasil_Banpang.pdf"
+        )
+
+        # ======================================================
+        # FOLDER PDF
+        # ======================================================
 
         folder_label = ctk.CTkLabel(
             output,
-            text="Lokasi Penyimpanan",
-            font=ctk.CTkFont(size=10),
+            text="Lokasi Penyimpanan PDF",
+            font=ctk.CTkFont(
+                size=10
+            ),
             text_color=Colors.TEXT_SECONDARY
         )
-        folder_label.pack(anchor="w", padx=14)
 
-        folder_row = ctk.CTkFrame(output, fg_color="transparent")
-        folder_row.pack(fill="x", padx=14, pady=(3, 5))
-        folder_row.grid_columnconfigure(0, weight=1)
-        folder_row.grid_columnconfigure(1, weight=0)
+        folder_label.pack(
+            anchor="w",
+            padx=14
+        )
+
+        folder_row = ctk.CTkFrame(
+            output,
+            fg_color="transparent"
+        )
+
+        folder_row.pack(
+            fill="x",
+            padx=14,
+            pady=(3, 5)
+        )
+
+        folder_row.grid_columnconfigure(
+            0,
+            weight=1
+        )
+
+        folder_row.grid_columnconfigure(
+            1,
+            weight=0
+        )
 
         self.output_folder_entry = ctk.CTkEntry(
             folder_row,
             height=34,
             corner_radius=8
         )
-        self.output_folder_entry.grid(row=0, column=0, sticky="ew", padx=(0, 7))
-        self.output_folder_entry.insert(0, self.output_folder)
+
+        self.output_folder_entry.grid(
+            row=0,
+            column=0,
+            sticky="ew",
+            padx=(0, 7)
+        )
+
+        self.output_folder_entry.insert(
+            0,
+            self.output_folder
+        )
 
         browse_button = ctk.CTkButton(
             folder_row,
@@ -1127,71 +2370,194 @@ class VerifikasiBanpangPage(ctk.CTkFrame):
             text_color=Colors.TEXT_PRIMARY,
             command=self.choose_output_folder
         )
-        browse_button.grid(row=0, column=1)
+
+        browse_button.grid(
+            row=0,
+            column=1
+        )
+
+        # ======================================================
+        # FOLDER FOTO PBP
+        # ======================================================
+
+        pbp_folder_label = ctk.CTkLabel(
+            output,
+            text="Lokasi Foto PBP",
+            font=ctk.CTkFont(
+                size=10
+            ),
+            text_color=Colors.TEXT_SECONDARY
+        )
+
+        pbp_folder_label.pack(
+            anchor="w",
+            padx=14,
+            pady=(3, 0)
+        )
+
+        pbp_folder_row = ctk.CTkFrame(
+            output,
+            fg_color="transparent"
+        )
+
+        pbp_folder_row.pack(
+            fill="x",
+            padx=14,
+            pady=(3, 7)
+        )
+
+        pbp_folder_row.grid_columnconfigure(
+            0,
+            weight=1
+        )
+
+        pbp_folder_row.grid_columnconfigure(
+            1,
+            weight=0
+        )
+
+        self.pbp_photo_folder_entry = ctk.CTkEntry(
+            pbp_folder_row,
+            height=34,
+            corner_radius=8
+        )
+
+        self.pbp_photo_folder_entry.grid(
+            row=0,
+            column=0,
+            sticky="ew",
+            padx=(0, 7)
+        )
+
+        self.pbp_photo_folder_entry.insert(
+            0,
+            self.pbp_photo_folder
+        )
+
+        pbp_browse_button = ctk.CTkButton(
+            pbp_folder_row,
+            text="📁",
+            width=42,
+            height=34,
+            corner_radius=8,
+            fg_color="#FFFFFF",
+            hover_color="#F5F8FC",
+            border_width=1,
+            border_color=Colors.BORDER,
+            text_color=Colors.TEXT_PRIMARY,
+            command=self.choose_pbp_photo_folder
+        )
+
+        pbp_browse_button.grid(
+            row=0,
+            column=1
+        )
+
+        # ======================================================
+        # CHECKBOX
+        # ======================================================
 
         self.open_pdf_after_checkbox = ctk.CTkCheckBox(
             output,
             text="Buka PDF setelah selesai",
-            font=ctk.CTkFont(size=10),
+            font=ctk.CTkFont(
+                size=10
+            ),
             text_color=Colors.TEXT_SECONDARY
         )
-        self.open_pdf_after_checkbox.pack(anchor="w", padx=14, pady=(2, 8))
+
+        self.open_pdf_after_checkbox.pack(
+            anchor="w",
+            padx=14,
+            pady=(2, 10)
+        )
+
         self.open_pdf_after_checkbox.select()
 
-        progress_frame = ctk.CTkFrame(card, fg_color="transparent")
-        progress_frame.pack(fill="x", padx=22, pady=(0, 4))
+        # ======================================================
+        # BOTTOM ACTION
+        # ======================================================
 
-        self.collection_progress = ctk.CTkProgressBar(
-            progress_frame,
-            height=10,
-            corner_radius=5
+        bottom = ctk.CTkFrame(
+            card,
+            fg_color="transparent"
         )
-        self.collection_progress.pack(fill="x")
-        self.collection_progress.set(0)
 
-        progress_info = ctk.CTkFrame(card, fg_color="transparent")
-        progress_info.pack(fill="x", padx=22, pady=(3, 0))
+        bottom.pack(
+            fill="x",
+            padx=22,
+            pady=(0, 16)
+        )
 
-        self.collection_percentage = ctk.CTkLabel(
-            progress_info,
-            text="0%",
-            font=ctk.CTkFont(size=12, weight="bold"),
+        bottom.grid_columnconfigure(
+            0,
+            weight=1
+        )
+
+        bottom.grid_columnconfigure(
+            1,
+            weight=0
+        )
+
+        action_info = ctk.CTkFrame(
+            bottom,
+            fg_color="transparent"
+        )
+
+        action_info.grid(
+            row=0,
+            column=0,
+            sticky="w"
+        )
+
+        action_title = ctk.CTkLabel(
+            action_info,
+            text="Output:",
+            font=ctk.CTkFont(
+                size=10,
+                weight="bold"
+            ),
             text_color=Colors.TEXT_PRIMARY
         )
-        self.collection_percentage.pack(side="left")
 
-        self.collection_page_info = ctk.CTkLabel(
-            progress_info,
-            text="Data: 0 / 0",
-            font=Fonts.PAGE_SUBTITLE,
+        action_title.pack(
+            side="left"
+        )
+
+        action_description = ctk.CTkLabel(
+            action_info,
+            text="PDF + Foto KTP  •  Foto PBP tersimpan terpisah",
+            font=ctk.CTkFont(
+                size=10
+            ),
             text_color=Colors.TEXT_SECONDARY
         )
-        self.collection_page_info.pack(side="right")
 
-        bottom = ctk.CTkFrame(card, fg_color="transparent")
-        bottom.pack(fill="x", padx=22, pady=(7, 16))
-
-        self.data_info_label = ctk.CTkLabel(
-            bottom,
-            text="Belum ada data yang dibaca.",
-            font=Fonts.PAGE_SUBTITLE,
-            text_color=Colors.TEXT_SECONDARY,
-            anchor="w"
+        action_description.pack(
+            side="left",
+            padx=(6, 0)
         )
-        self.data_info_label.pack(side="left")
 
         self.start_collection_button = ctk.CTkButton(
             bottom,
-            text="▶  Mulai Pengambilan Data & PDF",
+            text="▶  Mulai Pengambilan Data",
             width=250,
             height=42,
             corner_radius=9,
             fg_color=Colors.PRIMARY,
             hover_color=Colors.PRIMARY_HOVER,
-            font=ctk.CTkFont(size=12, weight="bold"),
+            font=ctk.CTkFont(
+                size=12,
+                weight="bold"
+            ),
             command=self.start_data_collection
         )
-        self.start_collection_button.pack(side="right")
+
+        self.start_collection_button.grid(
+            row=0,
+            column=1,
+            sticky="e"
+        )
 
     # ==========================================================
     # CARD 4 - PROMPT VERIFIKASI
@@ -1750,6 +3116,30 @@ class VerifikasiBanpangPage(ctk.CTkFrame):
                             f"{len(record['foto_pbp_bytes']):,} bytes"
                         )
 
+                        # ======================================================
+                        # SIMPAN FOTO PBP KE FOLDER YANG DIPILIH USER
+                        # ======================================================
+                        try:
+                            pbp_photo_path = self.save_pbp_photo(
+                                record["foto_pbp_bytes"],
+                                index,
+                                no_pbp
+                            )
+
+                            record["foto_pbp_path"] = pbp_photo_path
+
+                            print(
+                                f"✓ Path Foto PBP: {pbp_photo_path}"
+                            )
+
+                        except Exception as save_error:
+                            record["foto_pbp_path"] = None
+
+                            print(
+                                f"✗ Gagal menyimpan Foto PBP "
+                                f"{no_pbp}: {save_error}"
+                            )
+
                         if url_pbp:
                             print(f"URL PBP: {url_pbp[:120]}...")
 
@@ -2139,6 +3529,76 @@ class VerifikasiBanpangPage(ctk.CTkFrame):
         self.output_folder = folder
         self.output_folder_entry.delete(0, "end")
         self.output_folder_entry.insert(0, folder)
+
+    def choose_pbp_photo_folder(self):
+        folder = filedialog.askdirectory(
+            title="Pilih Folder Penyimpanan Foto PBP",
+            initialdir=self.pbp_photo_folder
+        )
+
+        if not folder:
+            return
+
+        self.pbp_photo_folder = folder
+
+        self.pbp_photo_folder_entry.delete(
+            0,
+            "end"
+        )
+
+        self.pbp_photo_folder_entry.insert(
+            0,
+            folder
+        )
+
+    def save_pbp_photo(self, photo_bytes, index, no_pbp=""):
+        """
+        Menyimpan Foto PBP ke folder yang dipilih pengguna.
+        """
+
+        if not photo_bytes:
+            return None
+
+        folder = self.pbp_photo_folder_entry.get().strip()
+
+        if not folder:
+            folder = self.pbp_photo_folder
+
+        os.makedirs(
+            folder,
+            exist_ok=True
+        )
+
+        # Bersihkan No PBP agar aman digunakan sebagai nama file
+        safe_no_pbp = re.sub(
+            r'[<>:"/\\|?*]',
+            "_",
+            str(no_pbp).strip()
+        )
+
+        if not safe_no_pbp:
+            safe_no_pbp = f"PBP_{index:03d}"
+
+        filename = (
+            f"{index:03d}_{safe_no_pbp}.jpg"
+        )
+
+        file_path = os.path.join(
+            folder,
+            filename
+        )
+
+        with open(
+            file_path,
+            "wb"
+        ) as file:
+            file.write(photo_bytes)
+
+        print(
+            f"✓ Foto PBP disimpan: {file_path}"
+        )
+
+        return file_path
 
     def get_output_pdf_path(self):
         filename = self.pdf_filename_entry.get().strip()
